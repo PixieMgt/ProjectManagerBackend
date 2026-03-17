@@ -1,0 +1,25 @@
+{
+  "name": "projectmanagerbackend",
+  "version": "1.0.0",
+  "description": "ProjectManager is a full-stack SaaS platform for freelance and small-team developers to manage software projects. Users can track clients, projects, tasks, time and invoices while also integrating with Git repositories to view commits, pull requests and development statuses.",
+  "homepage": "https://github.com/PixieMgt/ProjectManagerBackend#readme",
+  "bugs": {
+    "url": "https://github.com/PixieMgt/ProjectManagerBackend/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PixieMgt/ProjectManagerBackend.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node ./src/app.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1"
+  }
+}

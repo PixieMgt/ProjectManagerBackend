@@ -30,8 +30,19 @@ async function insertClient(data) {
   }
 }
 
+async function changeClient(id, data) {
+  try {
+    const [row] = await db("clients").where({ id }).update(data).returning("*");
+    return row;
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
 module.exports = {
   findAllClients,
   findClient,
   insertClient,
+  changeClient,
 };

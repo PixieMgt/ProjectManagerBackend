@@ -2,6 +2,7 @@ const {
   findAllClients,
   findClient,
   insertClient,
+  changeClient,
 } = require("../repositories/clients.repository");
 const { toClientModel } = require("../models/client.model");
 
@@ -21,8 +22,22 @@ async function createNewClient(data) {
   return toClientModel(client);
 }
 
+async function updateExistingClient(id, data) {
+  const updateData = {
+    name: data.name,
+    email: data.email,
+    phone: data.phone,
+    notes: data.notes,
+  };
+
+  const client = await changeClient(id, updateData);
+  if (!client) return null;
+  return toClientModel(client);
+}
+
 module.exports = {
   getAllClients,
   getClientById,
   createNewClient,
+  updateExistingClient,
 };

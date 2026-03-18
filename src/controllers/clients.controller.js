@@ -2,6 +2,7 @@ const {
   getAllClients,
   getClientById,
   createNewClient,
+  updateExistingClient,
 } = require("../services/clients.service");
 
 async function getClients(req, res) {
@@ -40,16 +41,27 @@ async function createClient(req, res) {
     return res.status(200).json({ client });
   } catch (e) {
     console.error(e);
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
     return res.status(500).json({ message: "Internal server error" });
   }
 }
 
 async function updateClient(req, res) {
   try {
-    res.status(200).json({ message: "under construction" });
+    const client = await updateExistingClient(req.params.id, req.body);
+    if (!client)
+      return res
+        .status(404)
+        .json({ message: `Client with id ${req.params.id} not found` });
+    return res.status(200).json({ client });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 

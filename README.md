@@ -13,7 +13,6 @@ ProjectManager is a full-stack SaaS platform for freelance and small-team develo
 ### clients
 - id **bigint** IDENTITY(1,1) PK
 - name **varchar(255)** NOT NULL
-- company **varchar(255)**
 - email **varchar(255)**
 - phone **varchar(50)**
 - notes **varchar(MAX)**

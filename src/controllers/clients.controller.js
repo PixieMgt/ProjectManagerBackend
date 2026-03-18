@@ -1,9 +1,15 @@
+const { getAllClients } = require("../services/clients.service");
+
 async function getClients(req, res) {
   try {
-    res.status(200).json({ message: "under construction" });
+    const clients = await getAllClients();
+    return res.status(200).json({ clients });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 

@@ -11,8 +11,23 @@ async function findAllUsers() {
 
 async function findUser(id) {
   try {
-    return await db("users").where({ id }).select("*");
+    return await db("users").where({ id }).first();
   } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
+async function insertUser(data) {
+  try {
+    const [row] = await db("users").insert(data).returning("*");
+    return row;
+  } catch (e) {
+    // Duplicate e-mail error codes for MSSQL
+    if (e.number === 2627 || e.number === 2601) {
+      throw new Error("EMAIL_IN_USE");
+    }
+
     console.error(e);
     throw new Error("DATABASE_ERROR");
   }
@@ -21,4 +36,5 @@ async function findUser(id) {
 module.exports = {
   findAllUsers,
   findUser,
+  insertUser,
 };

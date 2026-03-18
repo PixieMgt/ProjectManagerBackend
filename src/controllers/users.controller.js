@@ -1,37 +1,45 @@
-const { getAllUsers, getUserById } = require("../services/users.service");
+const {
+  getAllUsers,
+  getUserById,
+  createNewUser,
+} = require("../services/users.service");
 
 async function getUsers(req, res) {
   try {
     const users = await getAllUsers();
-    res.status(200).json({ users: users });
+    return res.status(200).json({ users });
   } catch (e) {
     console.error(e);
 
     if (e.message === "DATABASE_ERROR")
       return res.status(500).json({ message: "Database error" });
-    res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 
 async function getUser(req, res) {
   try {
     const user = await getUserById(req.params.id);
-    res.status(200).json({ user: user });
+    return res.status(200).json({ user });
   } catch (e) {
     console.error(e);
 
     if (e.message === "DATABASE_ERROR")
       return res.status(500).json({ message: "Database error" });
-    res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 
 async function createUser(req, res) {
   try {
-    res.status(200).json({ message: "under construction" });
+    const user = await createNewUser(req.body);
+    return res.status(200).json({ user });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+
+    if (e.message === "EMAIL_IN_USE")
+      return res.status(400).json({ message: "E-mail already in use" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 

@@ -4,6 +4,8 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT;
 
+app.use(express.json());
+
 const authenticationRouter = require("./routes/authentication.routes.js");
 const usersRouter = require("./routes/users.routes.js");
 const clientsRouter = require("./routes/clients.routes.js");

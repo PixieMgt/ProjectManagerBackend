@@ -4,6 +4,7 @@ function toUserModel(row) {
     name: row.name,
     email: row.email,
     role: row.role,
+    createdAt: row.created_at,
   };
 }
 

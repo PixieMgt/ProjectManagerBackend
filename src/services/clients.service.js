@@ -3,6 +3,7 @@ const {
   findClient,
   insertClient,
   changeClient,
+  removeClient,
 } = require("../repositories/clients.repository");
 const { toClientModel } = require("../models/client.model");
 
@@ -35,9 +36,16 @@ async function updateExistingClient(id, data) {
   return toClientModel(client);
 }
 
+async function deleteExistingClient(id) {
+  const client = await removeClient(id);
+  if (!client) return null;
+  return toClientModel(client);
+}
+
 module.exports = {
   getAllClients,
   getClientById,
   createNewClient,
   updateExistingClient,
+  deleteExistingClient,
 };

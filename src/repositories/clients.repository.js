@@ -40,9 +40,20 @@ async function changeClient(id, data) {
   }
 }
 
+async function removeClient(id) {
+  try {
+    const [row] = await db("clients").where({ id }).delete().returning("*");
+    return row;
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
 module.exports = {
   findAllClients,
   findClient,
   insertClient,
   changeClient,
+  removeClient,
 };

@@ -1,24 +1,17 @@
 const express = require("express");
 const router = express.Router();
+const {
+  getTimeEntries,
+  getTimeEntry,
+  createTimeEntry,
+  updateTimeEntry,
+  deleteTimeEntry,
+} = require("../controllers/time-entries.controller");
 
-router.get("/", (req, res) => {
-  res.status(200).json({ message: "under construction" });
-});
-
-router.get("/:id", (req, res) => {
-  res.status(200).json({ message: "under construction" });
-});
-
-router.post("/", (req, res) => {
-  res.status(200).json({ message: "under construction" });
-});
-
-router.patch("/:id", (req, res) => {
-  res.status(200).json({ message: "under construction" });
-});
-
-router.delete("/:id", (req, res) => {
-  res.status(200).json({ message: "under construction" });
-});
+router.get("/", getTimeEntries);
+router.get("/:id", getTimeEntry);
+router.post("/", createTimeEntry);
+router.patch("/:id", updateTimeEntry);
+router.delete("/:id", deleteTimeEntry);
 
 module.exports = router;

@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const { getPullRequest } = require("../controllers/pull-requests.controller");
 
-router.get("/:id", (req, res) => {
-  res.status(200).json({ message: "under construction" });
-});
+router.get("/:id", getPullRequest);
 
 module.exports = router;

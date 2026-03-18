@@ -1,0 +1,172 @@
+async function getProjects(req, res) {
+  try {
+    res.status(200).json({ message: "under construction" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function getProject(req, res) {
+  try {
+    res.status(200).json({ message: "under construction" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function createProject(req, res) {
+  try {
+    res.status(200).json({ message: "under construction" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function updateProject(req, res) {
+  try {
+    res.status(200).json({ message: "under construction" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function deleteProject(req, res) {
+  try {
+    res.status(200).json({ message: "under construction" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function getProjectMembers(req, res) {
+  try {
+    res.status(200).json({ message: "under construction" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function createProjectMember(req, res) {
+  try {
+    res.status(200).json({ message: "under construction" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function updateProjectMember(req, res) {
+  try {
+    res.status(200).json({ message: "under construction" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function deleteProjectMember(req, res) {
+  try {
+    res.status(200).json({ message: "under construction" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function getProjectTasks(req, res) {
+  try {
+    res.status(200).json({ message: "under construction" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function getProjectActivities(req, res) {
+  try {
+    res.status(200).json({ message: "under construction" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function getProjectDocuments(req, res) {
+  try {
+    res.status(200).json({ message: "under construction" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function getProjectDeployments(req, res) {
+  try {
+    res.status(200).json({ message: "under construction" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function getProjectInvoices(req, res) {
+  try {
+    res.status(200).json({ message: "under construction" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function getProjectRepositories(req, res) {
+  try {
+    res.status(200).json({ message: "under construction" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function createProjectRepository(req, res) {
+  try {
+    res.status(200).json({ message: "under construction" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function deleteProjectRepository(req, res) {
+  try {
+    res.status(200).json({ message: "under construction" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+module.exports = {
+  getProjects,
+  getProject,
+  createProject,
+  updateProject,
+  deleteProject,
+  getProjectMembers,
+  createProjectMember,
+  updateProjectMember,
+  deleteProjectMember,
+  getProjectTasks,
+  getProjectActivities,
+  getProjectDocuments,
+  getProjectDeployments,
+  getProjectInvoices,
+  getProjectRepositories,
+  createProjectRepository,
+  deleteProjectRepository,
+};

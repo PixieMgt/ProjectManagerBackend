@@ -1,24 +1,17 @@
 const express = require("express");
 const router = express.Router();
+const {
+  register,
+  login,
+  logout,
+  getCurrentUser,
+  refresh,
+} = require("../controllers/authentication.controller");
 
-router.post("/register", (req, res) => {
-  res.status(200).json({ message: "under construction" });
-});
-
-router.post("/login", (req, res) => {
-  res.status(200).json({ message: "under construction" });
-});
-
-router.post("/logout", (req, res) => {
-  res.status(200).json({ message: "under construction" });
-});
-
-router.get("/me", (req, res) => {
-  res.status(200).json({ message: "under construction" });
-});
-
-router.post("/refresh", (req, res) => {
-  res.status(200).json({ message: "under construction" });
-});
+router.post("/register", register);
+router.post("/login", login);
+router.post("/logout", logout);
+router.get("/me", getCurrentUser);
+router.post("/refresh", refresh);
 
 module.exports = router;

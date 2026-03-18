@@ -1,28 +1,19 @@
 const express = require("express");
 const router = express.Router();
+const {
+  getRepositories,
+  getRepository,
+  createRepository,
+  deleteRepository,
+  getRepositoryCommits,
+  getRepositoryPullRequests,
+} = require("../controllers/repositories.controller");
 
-router.get("/", (req, res) => {
-  res.status(200).json({ message: "under construction" });
-});
-
-router.get("/:id", (req, res) => {
-  res.status(200).json({ message: "under construction" });
-});
-
-router.post("/", (req, res) => {
-  res.status(200).json({ message: "under construction" });
-});
-
-router.delete("/:id", (req, res) => {
-  res.status(200).json({ message: "under construction" });
-});
-
-router.get("/:id/commits", (req, res) => {
-  res.status(200).json({ message: "under construction" });
-});
-
-router.get("/:id/pull-requests", (req, res) => {
-  res.status(200).json({ message: "under construction" });
-});
+router.get("/", getRepositories);
+router.get("/:id", getRepositories);
+router.post("/", createRepository);
+router.delete("/:id", deleteRepository);
+router.get("/:id/commits", getRepositoryCommits);
+router.get("/:id/pull-requests", getRepositoryPullRequests);
 
 module.exports = router;

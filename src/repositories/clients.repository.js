@@ -2,7 +2,8 @@ const db = require("../config/db");
 
 async function findAllClients() {
   try {
-    return await db("clients").select("*");
+    const clients = await db("clients").select("*");
+    return clients;
   } catch (e) {
     console.error(e);
     throw new Error("DATABASE_ERROR");

@@ -13,9 +13,9 @@ const createUserSchema = z.object({
       /[^A-Za-z0-9]/,
       "Password must contain at least one special character",
     ),
-  role: z.enum(["admin", "developer", "client"], {
+  role: z.enum(["admin", "developer"], {
     required_error: "Role is required",
-    invalid_type_error: "Role must be one of: admin, employee, client",
+    invalid_type_error: "Role must be one of: admin, developer",
   }),
 });
 
@@ -34,8 +34,8 @@ const updateUserSchema = z.object({
     )
     .optional(),
   role: z
-    .enum(["admin", "developer", "client"], {
-      invalid_type_error: "Role must be one of: admin, developer, client",
+    .enum(["admin", "developer"], {
+      invalid_type_error: "Role must be one of: admin, developer",
     })
     .optional(),
 });

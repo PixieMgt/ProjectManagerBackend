@@ -5,6 +5,7 @@ const {
   findUser,
   insertUser,
   changeUser,
+  removeUser,
 } = require("../repositories/users.repository");
 const { toUserModel } = require("../models/user.model");
 
@@ -15,6 +16,7 @@ async function getAllUsers() {
 
 async function getUserById(id) {
   const user = await findUser(id);
+  if (!user) return null;
   return toUserModel(user);
 }
 
@@ -41,6 +43,13 @@ async function updateExistingUser(id, data) {
     updateData.password_hash = await bcrypt.hash(data.password, 10);
 
   const user = await changeUser(id, updateData);
+  if (!user) return null;
+  return toUserModel(user);
+}
+
+async function deleteExistingUser(id) {
+  const user = await removeUser(id);
+  if (!user) return null;
   return toUserModel(user);
 }
 
@@ -49,4 +58,5 @@ module.exports = {
   getUserById,
   createNewUser,
   updateExistingUser,
+  deleteExistingUser,
 };

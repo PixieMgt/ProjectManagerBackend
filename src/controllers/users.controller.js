@@ -3,6 +3,7 @@ const {
   getUserById,
   createNewUser,
   updateExistingUser,
+  deleteExistingUser,
 } = require("../services/users.service");
 
 async function getUsers(req, res) {
@@ -21,6 +22,10 @@ async function getUsers(req, res) {
 async function getUser(req, res) {
   try {
     const user = await getUserById(req.params.id);
+    if (!user)
+      return res
+        .status(404)
+        .json({ message: `User with id ${req.params.id} not found` });
     return res.status(200).json({ user });
   } catch (e) {
     console.error(e);
@@ -49,6 +54,10 @@ async function createUser(req, res) {
 async function updateUser(req, res) {
   try {
     const user = await updateExistingUser(req.params.id, req.body);
+    if (!user)
+      return res
+        .status(404)
+        .json({ message: `User with id ${req.params.id} not found` });
     return res.status(200).json({ user });
   } catch (e) {
     console.error(e);
@@ -63,10 +72,18 @@ async function updateUser(req, res) {
 
 async function deleteUser(req, res) {
   try {
-    res.status(200).json({ message: "under construction" });
+    const user = await deleteExistingUser(req.params.id);
+    if (!user)
+      return res
+        .status(404)
+        .json({ message: `User with id ${req.params.id} not found` });
+    return res.status(200).json({ user });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 

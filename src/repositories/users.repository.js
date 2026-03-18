@@ -48,9 +48,20 @@ async function changeUser(id, data) {
   }
 }
 
+async function removeUser(id) {
+  try {
+    const [row] = await db("users").where({ id }).delete().returning("*");
+    return row;
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
 module.exports = {
   findAllUsers,
   findUser,
   insertUser,
   changeUser,
+  removeUser,
 };

@@ -1,4 +1,8 @@
-const { getAllClients, getClientById } = require("../services/clients.service");
+const {
+  getAllClients,
+  getClientById,
+  createNewClient,
+} = require("../services/clients.service");
 
 async function getClients(req, res) {
   try {
@@ -32,6 +36,8 @@ async function getClient(req, res) {
 
 async function createClient(req, res) {
   try {
+    const client = await createNewClient(req.body);
+    return res.status(200).json({ client });
     res.status(200).json({ message: "under construction" });
   } catch (e) {
     console.error(e);

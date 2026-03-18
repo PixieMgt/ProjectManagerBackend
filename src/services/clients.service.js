@@ -1,4 +1,7 @@
-const { findAllClients } = require("../repositories/clients.repository");
+const {
+  findAllClients,
+  findClient,
+} = require("../repositories/clients.repository");
 const { toClientModel } = require("../models/client.model");
 
 async function getAllClients() {
@@ -6,6 +9,13 @@ async function getAllClients() {
   return clients.map(toClientModel);
 }
 
+async function getClientById(id) {
+  const client = await findClient(id);
+  if (!client) return null;
+  return toClientModel(client);
+}
+
 module.exports = {
   getAllClients,
+  getClientById,
 };

@@ -200,12 +200,10 @@ ProjectManager is a full-stack SaaS platform for freelance and small-team develo
 - GET /projects/:id/activities
 - GET /projects/:id/docs
 - GET /projects/:id/deployments
+- GET /projects/:id/invoices
 - GET /projects/:id/repositories
 - POST /projects/:id/repositories
 - DELETE /projects/:projectId/repositories/:repoId
-- GET /projects/:id/deployments
-- GET /projects/:id/invoices
-- GET /projects/:id/docs
 ### tasks
 - GET /tasks
 - GET /tasks/:id

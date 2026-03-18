@@ -1,4 +1,4 @@
-const { findAllUsers } = require("../repositories/users.repository");
+const { findAllUsers, findUser } = require("../repositories/users.repository");
 const { toUserModel } = require("../models/user.model");
 
 async function getAllUsers() {
@@ -6,6 +6,12 @@ async function getAllUsers() {
   return users.map(toUserModel);
 }
 
+async function getUserById(id) {
+  const user = await findUser(id);
+  return user.map(toUserModel);
+}
+
 module.exports = {
   getAllUsers,
+  getUserById,
 };

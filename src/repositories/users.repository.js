@@ -9,6 +9,16 @@ async function findAllUsers() {
   }
 }
 
+async function findUser(id) {
+  try {
+    return await db("users").where({ id }).select("*");
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
 module.exports = {
   findAllUsers,
+  findUser,
 };

@@ -1,4 +1,4 @@
-const { getAllUsers } = require("../services/users.service");
+const { getAllUsers, getUserById } = require("../services/users.service");
 
 async function getUsers(req, res) {
   try {
@@ -15,9 +15,13 @@ async function getUsers(req, res) {
 
 async function getUser(req, res) {
   try {
-    res.status(200).json({ message: "under construction" });
+    const user = await getUserById(req.params.id);
+    res.status(200).json({ user: user });
   } catch (e) {
     console.error(e);
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
     res.status(500).json({ message: "Internal server error" });
   }
 }

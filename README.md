@@ -213,7 +213,7 @@ ProjectManager is a full-stack SaaS platform for freelance and small-team develo
 - GET /tasks/:id/time-entries
 - GET /tasks/:id/commits
 - POST /tasks/:id/commits
-- DELETE /tasks/:id/commits
+- DELETE /tasks/:taskId/commits/:commitId
 ### time-entries
 - GET /time-entries
 - GET /time-entries/:id
@@ -242,18 +242,17 @@ ProjectManager is a full-stack SaaS platform for freelance and small-team develo
 - PATCH /invoices/:id
 - DELETE /invoices/:id
 - POST /invoices/:id/items
-### invoice-items
-- PATCH /invoice-items/:id
-- DELETE /invoice-items/:id
+- PATCH /invoices/:invoiceId/items/:itemId
+- DELETE /invoices/:invoiceId/items/:itemId
 ### documents
-- GET /docs/:id
-- POST /docs
-- PATCH /docs/:id
-- DELETE /docs/:id
+- GET /documents/:id
+- POST /documents
+- PATCH /documents/:id
+- DELETE /documents/:id
 ### activities
 - GET /activities
 ### integrations
-- POST /integrations/github/connect
-- POST /integrations/github/callback
 - GET /integrations
 - DELETE /integrations/:id
+- POST /integrations/github/connect
+- POST /integrations/github/callback

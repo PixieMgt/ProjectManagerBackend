@@ -1,8 +1,14 @@
+const { getAllUsers } = require("../services/users.service");
+
 async function getUsers(req, res) {
   try {
-    res.status(200).json({ message: "under construction" });
+    const users = await getAllUsers();
+    res.status(200).json({ users: users });
   } catch (e) {
     console.error(e);
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
     res.status(500).json({ message: "Internal server error" });
   }
 }

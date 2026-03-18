@@ -38,10 +38,9 @@ async function createClient(req, res) {
   try {
     const client = await createNewClient(req.body);
     return res.status(200).json({ client });
-    res.status(200).json({ message: "under construction" });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 

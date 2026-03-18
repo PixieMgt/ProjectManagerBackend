@@ -1,5 +1,8 @@
 const express = require("express");
 const router = express.Router();
+
+const validate = require("../middleware/validation.middleware");
+const { createClientSchema } = require("../validation/client.schema");
 const {
   getClients,
   getClient,
@@ -12,7 +15,7 @@ const {
 
 router.get("/", getClients);
 router.get("/:id", getClient);
-router.post("/", createClient);
+router.post("/", validate(createClientSchema), createClient);
 router.patch("/:id", updateClient);
 router.delete("/:id", deleteClient);
 router.get("/:id/projects", getProjectsByClientId);

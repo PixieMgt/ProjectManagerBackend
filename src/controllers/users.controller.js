@@ -2,6 +2,7 @@ const {
   getAllUsers,
   getUserById,
   createNewUser,
+  updateExistingUser,
 } = require("../services/users.service");
 
 async function getUsers(req, res) {
@@ -39,16 +40,24 @@ async function createUser(req, res) {
 
     if (e.message === "EMAIL_IN_USE")
       return res.status(400).json({ message: "E-mail already in use" });
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
     return res.status(500).json({ message: "Internal server error" });
   }
 }
 
 async function updateUser(req, res) {
   try {
-    res.status(200).json({ message: "under construction" });
+    const user = await updateExistingUser(req.params.id, req.body);
+    return res.status(200).json({ user });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+
+    if (e.message === "EMAIL_IN_USE")
+      return res.status(400).json({ message: "E-mail already in use" });
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 

@@ -2,7 +2,10 @@ const express = require("express");
 const router = express.Router();
 
 const validate = require("../middleware/validation.middleware");
-const { createUserSchema } = require("../validation/user.schema");
+const {
+  createUserSchema,
+  updateUserSchema,
+} = require("../validation/user.schema");
 const {
   getUsers,
   getUser,
@@ -18,7 +21,7 @@ const {
 router.get("/", getUsers);
 router.get("/:id", getUser);
 router.post("/", validate(createUserSchema), createUser);
-router.patch("/:id", updateUser);
+router.patch("/:id", validate(updateUserSchema), updateUser);
 router.delete("/:id", deleteUser);
 router.get("/:id/projects", getUserProjects);
 router.get("/:id/time-entries", getUserTimeEntries);

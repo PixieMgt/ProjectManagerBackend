@@ -4,6 +4,7 @@ const {
   findAllUsers,
   findUser,
   insertUser,
+  changeUser,
 } = require("../repositories/users.repository");
 const { toUserModel } = require("../models/user.model");
 
@@ -29,8 +30,23 @@ async function createNewUser(data) {
   return toUserModel(user);
 }
 
+async function updateExistingUser(id, data) {
+  const updateData = {
+    name: data.name,
+    email: data.email,
+    role: data.role,
+  };
+
+  if (data.password)
+    updateData.password_hash = await bcrypt.hash(data.password, 10);
+
+  const user = await changeUser(id, updateData);
+  return toUserModel(user);
+}
+
 module.exports = {
   getAllUsers,
   getUserById,
   createNewUser,
+  updateExistingUser,
 };

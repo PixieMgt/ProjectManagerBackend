@@ -2,7 +2,8 @@ const db = require("../config/db");
 
 async function findAllUsers() {
   try {
-    return await db("users").select("*");
+    const users = await db("users").select("*");
+    return users;
   } catch (e) {
     console.error(e);
     throw new Error("DATABASE_ERROR");
@@ -11,7 +12,8 @@ async function findAllUsers() {
 
 async function findUser(id) {
   try {
-    return await db("users").where({ id }).first();
+    const [row] = await db("users").where({ id }).first();
+    return row;
   } catch (e) {
     console.error(e);
     throw new Error("DATABASE_ERROR");

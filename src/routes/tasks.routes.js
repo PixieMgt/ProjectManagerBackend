@@ -1,5 +1,11 @@
 const express = require("express");
 const router = express.Router();
+
+const validate = require("../middleware/validation.middleware");
+const {
+  createTaskSchema,
+  updateTaskSchema,
+} = require("../validation/task.schema");
 const {
   getTasks,
   getTask,
@@ -14,8 +20,8 @@ const {
 
 router.get("/", getTasks);
 router.get("/:id", getTask);
-router.post("/", createTask);
-router.patch("/:id", updateTask);
+router.post("/", validate(createTaskSchema), createTask);
+router.patch("/:id", validate(updateTaskSchema), updateTask);
 router.delete("/:id", deleteTask);
 router.get("/:id/time-entries", getTaskTimeEntries);
 router.get("/:id/commits", getTaskCommits);

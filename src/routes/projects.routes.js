@@ -1,5 +1,8 @@
 const express = require("express");
 const router = express.Router();
+
+const validate = require("../middleware/validation.middleware");
+const { createProjectSchema } = require("../validation/project.schema");
 const {
   getProjects,
   getProject,
@@ -22,7 +25,7 @@ const {
 
 router.get("/", getProjects);
 router.get("/:id", getProject);
-router.post("/", createProject);
+router.post("/", validate(createProjectSchema), createProject);
 router.patch("/:id", updateProject);
 router.delete("/:id", deleteProject);
 router.get("/:id/members", getProjectMembers);

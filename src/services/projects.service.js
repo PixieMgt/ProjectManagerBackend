@@ -1,6 +1,7 @@
 const {
   findAllProjects,
   findProject,
+  insertProject,
 } = require("../repositories/projects.repository");
 const { toProjectModel } = require("../models/project.model");
 
@@ -15,7 +16,23 @@ async function getProjectById(id) {
   return toProjectModel(project);
 }
 
+async function createNewProject(data) {
+  const normalized = {
+    client_id: data.clientId,
+    owner_user_id: data.ownerUserId,
+    name: data.name,
+    description: data.description,
+    status: data.status,
+    hourly_rate: data.hourlyRate,
+    start_date: data.startDate,
+    deadline: data.deadline,
+  };
+  const project = await insertProject(normalized);
+  return toProjectModel(project);
+}
+
 module.exports = {
   getAllProjects,
   getProjectById,
+  createNewProject,
 };

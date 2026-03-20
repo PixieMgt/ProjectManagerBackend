@@ -1,9 +1,9 @@
-const { z } = require("zod");
+const { z, date } = require("zod");
 
 const createProjectSchema = z.object({
   clientId: z.number().int().positive("Invalid client ID"),
   ownerUserId: z.number().int().positive("Invalid owner user ID"),
-  name: z.string().min(1, "Name is required"),
+  name: z.string("Name is required").min(1, "Name can't be empty"),
   description: z.string().optional(),
   status: z
     .enum(["planning", "active", "completed", "archived"], {
@@ -28,7 +28,7 @@ const updateProjectSchema = z.object({
     })
     .optional(),
   hourlyRate: z.number().optional(),
-  startDate: z.coerce.date().optional(),
+  startDate: z.iso.date().optional(),
   deadline: z.coerce.date().optional(),
 });
 

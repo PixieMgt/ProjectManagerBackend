@@ -19,7 +19,18 @@ async function findProject(id) {
   }
 }
 
+async function insertProject(data) {
+  try {
+    const [row] = await db("projects").insert(data).returning("*");
+    return row;
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
 module.exports = {
   findAllProjects,
   findProject,
+  insertProject,
 };

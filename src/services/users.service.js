@@ -22,27 +22,27 @@ async function getUserById(id) {
 
 async function createNewUser(data) {
   const passwordHash = await bcrypt.hash(data.password, 10);
-
-  const user = await insertUser({
+  const normalized = {
     name: data.name,
     email: data.email,
     password_hash: passwordHash,
     role: data.role,
-  });
+  };
+  const user = await insertUser(normalized);
   return toUserModel(user);
 }
 
 async function updateExistingUser(id, data) {
-  const updateData = {
+  const normalized = {
     name: data.name,
     email: data.email,
     role: data.role,
   };
 
   if (data.password)
-    updateData.password_hash = await bcrypt.hash(data.password, 10);
+    normalized.password_hash = await bcrypt.hash(data.password, 10);
 
-  const user = await changeUser(id, updateData);
+  const user = await changeUser(id, normalized);
   if (!user) return null;
   return toUserModel(user);
 }

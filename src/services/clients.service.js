@@ -19,19 +19,18 @@ async function getClientById(id) {
 }
 
 async function createNewClient(data) {
-  const client = await insertClient(data);
-  return toClientModel(client);
-}
-
-async function updateExistingClient(id, data) {
-  const updateData = {
+  const normalized = {
     name: data.name,
     email: data.email,
     phone: data.phone,
     notes: data.notes,
   };
+  const client = await insertClient(data);
+  return toClientModel(client);
+}
 
-  const client = await changeClient(id, updateData);
+async function updateExistingClient(id, data) {
+  const client = await changeClient(id, data);
   if (!client) return null;
   return toClientModel(client);
 }

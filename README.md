@@ -58,6 +58,7 @@ ProjectManager is a full-stack SaaS platform for freelance and small-team develo
 - idx_time_entries_task INDEX ON (task_id)
 - user_id **bigint** NOT NULL (FK -> users.id)
 - idx_time_entries_user INDEX ON (user_id)
+- comment **varchar(MAX)**
 - start_time **datetime2**
 - end_time **datetime2**
 - duration_minutes **int** AS DATEDIFF(MINUTE, start_time, end_time)

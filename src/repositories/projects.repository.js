@@ -42,9 +42,20 @@ async function changeProject(id, data) {
   }
 }
 
+async function removeProject(id) {
+  try {
+    const [row] = await db("projects").where({ id }).delete().returning("*");
+    return row;
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
 module.exports = {
   findAllProjects,
   findProject,
   insertProject,
   changeProject,
+  removeProject,
 };

@@ -3,6 +3,7 @@ const {
   findProject,
   insertProject,
   changeProject,
+  removeProject,
 } = require("../repositories/projects.repository");
 const { toProjectModel } = require("../models/project.model");
 
@@ -47,9 +48,16 @@ async function updateExistingProject(id, data) {
   return toProjectModel(project);
 }
 
+async function deleteExistingProject(id) {
+  const project = await removeProject(id);
+  if (!project) return null;
+  return toProjectModel(project);
+}
+
 module.exports = {
   getAllProjects,
   getProjectById,
   createNewProject,
   updateExistingProject,
+  deleteExistingProject,
 };

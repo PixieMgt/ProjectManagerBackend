@@ -28,7 +28,7 @@ const updateProjectSchema = z.object({
     })
     .optional(),
   hourlyRate: z.number().optional(),
-  startDate: z.iso.date().optional(),
+  startDate: z.coerce.date().optional(),
   deadline: z.coerce.date().optional(),
 });
 

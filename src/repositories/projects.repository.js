@@ -29,8 +29,22 @@ async function insertProject(data) {
   }
 }
 
+async function changeProject(id, data) {
+  try {
+    const [row] = await db("projects")
+      .where({ id })
+      .update(data)
+      .returning("*");
+    return row;
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
 module.exports = {
   findAllProjects,
   findProject,
   insertProject,
+  changeProject,
 };

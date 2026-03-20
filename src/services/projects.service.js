@@ -2,6 +2,7 @@ const {
   findAllProjects,
   findProject,
   insertProject,
+  changeProject,
 } = require("../repositories/projects.repository");
 const { toProjectModel } = require("../models/project.model");
 
@@ -31,8 +32,24 @@ async function createNewProject(data) {
   return toProjectModel(project);
 }
 
+async function updateExistingProject(id, data) {
+  const normalized = {
+    client_id: data.clientId,
+    owner_user_id: data.ownerUserId,
+    name: data.name,
+    description: data.description,
+    status: data.status,
+    hourly_rate: data.hourlyRate,
+    start_date: data.startDate,
+    deadline: data.deadline,
+  };
+  const project = await changeProject(id, normalized);
+  return toProjectModel(project);
+}
+
 module.exports = {
   getAllProjects,
   getProjectById,
   createNewProject,
+  updateExistingProject,
 };

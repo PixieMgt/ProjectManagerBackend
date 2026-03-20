@@ -1,4 +1,7 @@
-const { getAllProjects } = require("../services/projects.service");
+const {
+  getAllProjects,
+  getProjectById,
+} = require("../services/projects.service");
 
 async function getProjects(req, res) {
   try {
@@ -15,10 +18,18 @@ async function getProjects(req, res) {
 
 async function getProject(req, res) {
   try {
-    res.status(200).json({ message: "under construction" });
+    const project = await getProjectById(req.params.id);
+    if (!project)
+      return res
+        .status(404)
+        .json({ message: `Project with id ${req.params.id} not found` });
+    return res.status(200).json({ project });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 

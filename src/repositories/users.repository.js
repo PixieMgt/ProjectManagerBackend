@@ -12,7 +12,7 @@ async function findAllUsers() {
 
 async function findUser(id) {
   try {
-    const [row] = (await db("users").where({ id })).select("*");
+    const [row] = await db("users").where({ id }).select("*");
     return row;
   } catch (e) {
     console.error(e);

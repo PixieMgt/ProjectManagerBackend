@@ -9,6 +9,17 @@ async function findAllProjects() {
   }
 }
 
+async function findProject(id) {
+  try {
+    const [row] = await db("projects").where({ id }).select("*");
+    return row;
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
 module.exports = {
   findAllProjects,
+  findProject,
 };

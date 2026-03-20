@@ -1,9 +1,15 @@
+const { getAllProjects } = require("../services/projects.service");
+
 async function getProjects(req, res) {
   try {
-    res.status(200).json({ message: "under construction" });
+    const projects = await getAllProjects();
+    return res.status(200).json({ projects });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 

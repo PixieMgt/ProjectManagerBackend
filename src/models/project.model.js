@@ -11,3 +11,7 @@ function toProjectModel(row) {
     deadline: row.deadline,
   };
 }
+
+module.exports = {
+  toProjectModel,
+};

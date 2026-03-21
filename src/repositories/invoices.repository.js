@@ -101,6 +101,16 @@ async function removeInvoiceItem(id) {
   }
 }
 
+async function findAllClientInvoices(id) {
+  try {
+    const invoices = await db("invoices").where({ client_id: id }).select("*");
+    return invoices;
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
 module.exports = {
   findAllInvoices,
   findInvoice,
@@ -111,4 +121,5 @@ module.exports = {
   insertInvoiceItem,
   changeInvoiceItem,
   removeInvoiceItem,
+  findAllClientInvoices,
 };

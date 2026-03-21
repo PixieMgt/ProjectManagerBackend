@@ -5,7 +5,15 @@ const {
   changeClient,
   removeClient,
 } = require("../repositories/clients.repository");
+const {
+  findAllClientProjects,
+} = require("../repositories/projects.repository");
+const {
+  findAllClientInvoices,
+} = require("../repositories/invoices.repository");
 const { toClientModel } = require("../models/client.model");
+const { toProjectModel } = require("../models/project.model");
+const { toInvoiceModel } = require("../models/invoice.model");
 
 async function getAllClients() {
   const clients = await findAllClients();
@@ -41,10 +49,24 @@ async function deleteExistingClient(id) {
   return toClientModel(client);
 }
 
+async function getAllClientProjects(id) {
+  const projects = await findAllClientProjects(id);
+  if (projects.length === 0) return null;
+  return projects.map(toProjectModel);
+}
+
+async function getAllClientInvoices(id) {
+  const invoices = await findAllClientInvoices(id);
+  if (invoices.length === 0) return null;
+  return invoices.map(toInvoiceModel);
+}
+
 module.exports = {
   getAllClients,
   getClientById,
   createNewClient,
   updateExistingClient,
   deleteExistingClient,
+  getAllClientProjects,
+  getAllClientInvoices,
 };

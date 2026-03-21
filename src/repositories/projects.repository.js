@@ -64,6 +64,16 @@ async function findAllUserProjects(id) {
   }
 }
 
+async function findAllClientProjects(id) {
+  try {
+    const projects = await db("projects").where({ client_id: id }).select("*");
+    return projects;
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
 module.exports = {
   findAllProjects,
   findProject,
@@ -71,4 +81,5 @@ module.exports = {
   changeProject,
   removeProject,
   findAllUserProjects,
+  findAllClientProjects,
 };

@@ -12,8 +12,8 @@ const {
   createClient,
   updateClient,
   deleteClient,
-  getProjectsByClientId,
-  getInvoicesByClientId,
+  getClientProjects,
+  getClientInvoices,
 } = require("../controllers/clients.controller");
 
 router.get("/", getClients);
@@ -21,7 +21,7 @@ router.get("/:id", getClient);
 router.post("/", validate(createClientSchema), createClient);
 router.patch("/:id", validate(updateClientSchema), updateClient);
 router.delete("/:id", deleteClient);
-router.get("/:id/projects", getProjectsByClientId);
-router.get("/:id/invoices", getInvoicesByClientId);
+router.get("/:id/projects", getClientProjects);
+router.get("/:id/invoices", getClientInvoices);
 
 module.exports = router;

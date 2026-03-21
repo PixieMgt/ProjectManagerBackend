@@ -50,10 +50,21 @@ async function removeTask(id) {
   }
 }
 
+async function findAllUserTasks(id) {
+  try {
+    const tasks = await db("tasks").where({ owner_user_id: id }).select("*");
+    return tasks;
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
 module.exports = {
   findAllTasks,
   findTask,
   insertTask,
   changeTask,
   removeTask,
+  findAllUserTasks,
 };

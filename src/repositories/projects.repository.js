@@ -52,10 +52,23 @@ async function removeProject(id) {
   }
 }
 
+async function findAllUserProjects(id) {
+  try {
+    const projects = await db("projects")
+      .where({ owner_user_id: id })
+      .select("*");
+    return projects;
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
 module.exports = {
   findAllProjects,
   findProject,
   insertProject,
   changeProject,
   removeProject,
+  findAllUserProjects,
 };

@@ -5,7 +5,7 @@ const validate = require("../middleware/validation.middleware");
 const {
   createTimeEntrySchema,
   updateTimeEntrySchema,
-} = require("../validation/time-entries.schema");
+} = require("../validation/time-entry.schema");
 const {
   getTimeEntries,
   getTimeEntry,

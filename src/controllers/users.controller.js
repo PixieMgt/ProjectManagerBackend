@@ -4,6 +4,9 @@ const {
   createNewUser,
   updateExistingUser,
   deleteExistingUser,
+  getAllUserProjects,
+  getAllUserTimeEntries,
+  getAllUserTasks,
 } = require("../services/users.service");
 
 async function getUsers(req, res) {
@@ -89,32 +92,56 @@ async function deleteUser(req, res) {
 
 async function getUserProjects(req, res) {
   try {
-    res.status(200).json({ message: "under construction" });
+    const projects = await getAllUserProjects(req.params.id);
+    if (!projects)
+      return res.status(404).json({
+        message: `Projects for user with id ${req.params.id} not found`,
+      });
+    return res.status(200).json({ projects });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 
 async function getUserTimeEntries(req, res) {
   try {
-    res.status(200).json({ message: "under construction" });
+    const timeEntries = await getAllUserTimeEntries(req.params.id);
+    if (!timeEntries)
+      return res.status(404).json({
+        message: `Time entries for user with id ${req.params.id} not found`,
+      });
+    return res.status(200).json({ timeEntries });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
-  }
-}
 
-async function getUserActivities(req, res) {
-  try {
-    res.status(200).json({ message: "under construction" });
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 
 async function getUserTasks(req, res) {
+  try {
+    const tasks = await getAllUserTasks(req.params.id);
+    if (!tasks)
+      return res.status(404).json({
+        message: `Tasks for user with id ${req.params.id} not found`,
+      });
+    return res.status(200).json({ tasks });
+  } catch (e) {
+    console.error(e);
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function getUserActivities(req, res) {
   try {
     res.status(200).json({ message: "under construction" });
   } catch (e) {

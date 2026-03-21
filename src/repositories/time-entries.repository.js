@@ -1,5 +1,4 @@
 const db = require("../config/db");
-const { createTimeEntry } = require("../controllers/time-entries.controller");
 
 async function findAllTimeEntries() {
   try {
@@ -57,10 +56,23 @@ async function removeTimeEntry(id) {
   }
 }
 
+async function findAllUserTimeEntries(id) {
+  try {
+    const timeEntries = await db("time_entries")
+      .where({ user_id: id })
+      .select("*");
+    return timeEntries;
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
 module.exports = {
   findAllTimeEntries,
   findTimeEntry,
   insertTimeEntry,
   changeTimeEntry,
   removeTimeEntry,
+  findAllUserTimeEntries,
 };

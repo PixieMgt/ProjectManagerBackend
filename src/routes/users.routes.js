@@ -25,7 +25,7 @@ router.patch("/:id", validate(updateUserSchema), updateUser);
 router.delete("/:id", deleteUser);
 router.get("/:id/projects", getUserProjects);
 router.get("/:id/time-entries", getUserTimeEntries);
-router.get("/:id/activities", getUserActivities);
 router.get("/:id/tasks", getUserTasks);
+router.get("/:id/activities", getUserActivities);
 
 module.exports = router;

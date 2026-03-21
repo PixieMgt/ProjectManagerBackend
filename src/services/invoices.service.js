@@ -4,8 +4,15 @@ const {
   insertInvoice,
   changeInvoice,
   removeInvoice,
+  findAllInvoiceItems,
+  insertInvoiceItem,
+  changeInvoiceItem,
+  removeInvoiceItem,
 } = require("../repositories/invoices.repository");
-const { toInvoiceModel } = require("../models/invoice.model");
+const {
+  toInvoiceModel,
+  toInvoiceItemModel,
+} = require("../models/invoice.model");
 
 async function getAllInvoices() {
   const invoices = await findAllInvoices();
@@ -49,10 +56,49 @@ async function deleteExistingInvoice(id) {
   return toInvoiceModel(invoice);
 }
 
+async function getAllInvoiceItems(id) {
+  const invoiceItems = await findAllInvoiceItems(id);
+  return invoiceItems.map(toInvoiceItemModel);
+}
+
+async function createNewInvoiceItem(id, data) {
+  const normalized = {
+    invoice_id: id,
+    description: data.description,
+    quantity: data.quantity,
+    unit_price: data.unitPrice,
+  };
+  const invoiceItem = await insertInvoiceItem(normalized);
+  console.log(invoiceItem);
+  console.log(toInvoiceItemModel(invoiceItem));
+  return toInvoiceItemModel(invoiceItem);
+}
+
+async function updateExistingInvoiceItem(itemId, data) {
+  const normalized = {
+    description: data.description,
+    quantity: data.quantity,
+    unit_price: data.unitPrice,
+  };
+  const invoiceItem = await changeInvoiceItem(itemId, normalized);
+  if (!invoiceItem) return null;
+  return toInvoiceItemModel(invoiceItem);
+}
+
+async function deleteExistingInvoiceItem(id) {
+  const invoiceItem = await removeInvoiceItem(id);
+  if (!invoiceItem) return null;
+  return toInvoiceItemModel(invoiceItem);
+}
+
 module.exports = {
   getAllInvoices,
   getInvoiceById,
   createNewInvoice,
   updateExistingInvoice,
   deleteExistingInvoice,
+  getAllInvoiceItems,
+  createNewInvoiceItem,
+  updateExistingInvoiceItem,
+  deleteExistingInvoiceItem,
 };

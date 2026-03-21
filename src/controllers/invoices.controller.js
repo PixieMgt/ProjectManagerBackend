@@ -4,6 +4,10 @@ const {
   createNewInvoice,
   updateExistingInvoice,
   deleteExistingInvoice,
+  getAllInvoiceItems,
+  createNewInvoiceItem,
+  updateExistingInvoiceItem,
+  deleteExistingInvoiceItem,
 } = require("../services/invoices.service");
 
 async function getInvoices(req, res) {
@@ -85,28 +89,68 @@ async function deleteInvoice(req, res) {
 
 async function getInvoiceItems(req, res) {
   try {
-    res.status(200).json({ message: "under construction" });
+    const invoiceItems = await getAllInvoiceItems(req.params.id);
+    if (!invoiceItems)
+      return res.status(404).json({
+        message: `Invoice items for invoice with id ${req.params.id} not found`,
+      });
+    return res.status(200).json({ invoiceItems });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function createInvoiceItem(req, res) {
+  try {
+    const invoiceItem = await createNewInvoiceItem(req.params.id, req.body);
+    return res.status(200).json({ invoiceItem });
+  } catch (e) {
+    console.error(e);
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 
 async function updateInvoiceItem(req, res) {
   try {
-    res.status(200).json({ message: "under construction" });
+    const invoiceItem = await updateExistingInvoiceItem(
+      req.params.itemId,
+      req.body,
+    );
+    if (!invoiceItem)
+      return res.status(404).json({
+        message: `Invoice with id ${req.params.itemId} not found`,
+      });
+    return res.status(200).json({ invoiceItem });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 
 async function deleteInvoiceItem(req, res) {
   try {
-    res.status(200).json({ message: "under construction" });
+    const invoiceItem = await deleteExistingInvoiceItem(req.params.itemId);
+    if (!invoiceItem)
+      return res.status(404).json({
+        message: `Invoice with id ${req.params.itemId} not found`,
+      });
+    return res.status(200).json({ invoiceItem });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 
@@ -117,6 +161,7 @@ module.exports = {
   updateInvoice,
   deleteInvoice,
   getInvoiceItems,
+  createInvoiceItem,
   updateInvoiceItem,
   deleteInvoiceItem,
 };

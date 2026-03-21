@@ -24,7 +24,21 @@ const updateInvoiceSchema = z.object({
   dueDate: z.coerce.date().optional(),
 });
 
+const createInvoiceItemSchema = z.object({
+  description: z.string().min(1, "Description can't be empty").optional(),
+  quantity: z.number(),
+  unitPrice: z.number(),
+});
+
+const updateInvoiceItemSchema = z.object({
+  description: z.string().min(1, "Description can't be empty").optional(),
+  quantity: z.number().optional(),
+  unitPrice: z.number().optional(),
+});
+
 module.exports = {
   createInvoiceSchema,
   updateInvoiceSchema,
+  createInvoiceItemSchema,
+  updateInvoiceItemSchema,
 };

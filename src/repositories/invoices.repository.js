@@ -53,10 +53,62 @@ async function removeInvoice(id) {
   }
 }
 
+async function findAllInvoiceItems(id) {
+  try {
+    const invoiceItems = await db("invoice_items")
+      .where({ invoice_id: id })
+      .select("*");
+    return invoiceItems;
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
+async function insertInvoiceItem(data) {
+  try {
+    const [row] = await db("invoice_items").insert(data).returning("*");
+    return row;
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
+async function changeInvoiceItem(id, data) {
+  try {
+    const [row] = await db("invoice_items")
+      .where({ id })
+      .update(data)
+      .returning("*");
+    return row;
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
+async function removeInvoiceItem(id) {
+  try {
+    const [row] = await db("invoice_items")
+      .where({ id })
+      .delete()
+      .returning("*");
+    return row;
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
 module.exports = {
   findAllInvoices,
   findInvoice,
   insertInvoice,
   changeInvoice,
   removeInvoice,
+  findAllInvoiceItems,
+  insertInvoiceItem,
+  changeInvoiceItem,
+  removeInvoiceItem,
 };

@@ -5,6 +5,8 @@ const validate = require("../middleware/validation.middleware");
 const {
   createInvoiceSchema,
   updateInvoiceSchema,
+  createInvoiceItemSchema,
+  updateInvoiceItemSchema,
 } = require("../validation/invoice.schema");
 const {
   getInvoices,
@@ -13,6 +15,7 @@ const {
   updateInvoice,
   deleteInvoice,
   getInvoiceItems,
+  createInvoiceItem,
   updateInvoiceItem,
   deleteInvoiceItem,
 } = require("../controllers/invoices.controller");
@@ -23,7 +26,12 @@ router.post("/", validate(createInvoiceSchema), createInvoice);
 router.patch("/:id", validate(updateInvoiceSchema), updateInvoice);
 router.delete("/:id", deleteInvoice);
 router.get("/:id/items", getInvoiceItems);
-router.patch("/:invoiceId/items/:itemId", updateInvoiceItem);
+router.post("/:id/items", validate(createInvoiceItemSchema), createInvoiceItem);
+router.patch(
+  "/:invoiceId/items/:itemId",
+  validate(updateInvoiceItemSchema),
+  updateInvoiceItem,
+);
 router.delete("/:invoiceId/items/:itemId", deleteInvoiceItem);
 
 module.exports = router;

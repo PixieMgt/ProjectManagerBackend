@@ -241,6 +241,7 @@ ProjectManager is a full-stack SaaS platform for freelance and small-team develo
 - POST /invoices
 - PATCH /invoices/:id
 - DELETE /invoices/:id
+- GET /invoices/:id/items
 - POST /invoices/:id/items
 - PATCH /invoices/:invoiceId/items/:itemId
 - DELETE /invoices/:invoiceId/items/:itemId

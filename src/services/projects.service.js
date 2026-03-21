@@ -4,8 +4,15 @@ const {
   insertProject,
   changeProject,
   removeProject,
+  findAllProjectMembers,
+  insertProjectMember,
+  changeProjectMember,
+  removeProjectMember,
 } = require("../repositories/projects.repository");
-const { toProjectModel } = require("../models/project.model");
+const {
+  toProjectModel,
+  toProjectMemberModel,
+} = require("../models/project.model");
 
 async function getAllProjects() {
   const projects = await findAllProjects();
@@ -54,10 +61,45 @@ async function deleteExistingProject(id) {
   return toProjectModel(project);
 }
 
+async function getAllProjectMembers(id) {
+  const members = await findAllProjectMembers(id);
+  if (members.length === 0) return null;
+  return members.map(toProjectMemberModel);
+}
+
+async function createNewProjectMember(id, data) {
+  const normalized = {
+    project_id: id,
+    user_id: data.userId,
+    role: data.role,
+  };
+  const member = await insertProjectMember(normalized);
+  return toProjectMemberModel(member);
+}
+
+async function updateExistingProjectMember(projectId, userId, data) {
+  const normalized = {
+    role: data.role,
+  };
+  const member = await changeProjectMember(projectId, userId, normalized);
+  if (!member) return null;
+  return toProjectMemberModel(member);
+}
+
+async function deleteExistingProjectMember(projectId, userId) {
+  const member = await removeProjectMember(projectId, userId);
+  if (!member) return null;
+  return toProjectMemberModel(member);
+}
+
 module.exports = {
   getAllProjects,
   getProjectById,
   createNewProject,
   updateExistingProject,
   deleteExistingProject,
+  getAllProjectMembers,
+  createNewProjectMember,
+  updateExistingProjectMember,
+  deleteExistingProjectMember,
 };

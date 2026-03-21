@@ -4,6 +4,10 @@ const {
   createNewProject,
   updateExistingProject,
   deleteExistingProject,
+  getAllProjectMembers,
+  createNewProjectMember,
+  updateExistingProjectMember,
+  deleteExistingProjectMember,
 } = require("../services/projects.service");
 
 async function getProjects(req, res) {
@@ -85,37 +89,76 @@ async function deleteProject(req, res) {
 
 async function getProjectMembers(req, res) {
   try {
-    res.status(200).json({ message: "under construction" });
+    const members = await getAllProjectMembers(req.params.id);
+    if (!members)
+      return res.status(404).json({
+        message: `Project members for project with id ${req.params.id} not found`,
+      });
+    return res.status(200).json({ members });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 
 async function createProjectMember(req, res) {
   try {
-    res.status(200).json({ message: "under construction" });
+    const member = await createNewProjectMember(req.params.id, req.body);
+    return res.status(200).json({ member });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+
+    if (e.message === "PROJECT_MEMBER_ALREADY_EXISTS")
+      return res.status(400).json({ message: "Project member already exists" });
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 
 async function updateProjectMember(req, res) {
   try {
-    res.status(200).json({ message: "under construction" });
+    const member = await updateExistingProjectMember(
+      req.params.projectId,
+      req.params.userId,
+      req.body,
+    );
+    if (!member)
+      return res.status(404).json({
+        message: `Project member with userId ${req.params.userId} 
+          for project with id ${req.params.projectId} not found`,
+      });
+    return res.status(200).json({ member });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 
 async function deleteProjectMember(req, res) {
   try {
-    res.status(200).json({ message: "under construction" });
+    const member = await deleteExistingProjectMember(
+      req.params.projectId,
+      req.params.userId,
+    );
+    if (!member)
+      return res.status(404).json({
+        message: `Project member with userId ${req.params.userId} 
+          for project with id ${req.params.projectId} not found`,
+      });
+    return res.status(200).json({ member });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 

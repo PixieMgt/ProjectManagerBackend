@@ -5,6 +5,8 @@ const validate = require("../middleware/validation.middleware");
 const {
   createProjectSchema,
   updateProjectSchema,
+  createProjectMemberSchema,
+  updateProjectMemberSchema,
 } = require("../validation/project.schema");
 const {
   getProjects,
@@ -32,8 +34,16 @@ router.post("/", validate(createProjectSchema), createProject);
 router.patch("/:id", validate(updateProjectSchema), updateProject);
 router.delete("/:id", deleteProject);
 router.get("/:id/members", getProjectMembers);
-router.post("/:id/members", createProjectMember);
-router.patch("/:projectId/members/:userId", updateProjectMember);
+router.post(
+  "/:id/members",
+  validate(createProjectMemberSchema),
+  createProjectMember,
+);
+router.patch(
+  "/:projectId/members/:userId",
+  validate(updateProjectMemberSchema),
+  updateProjectMember,
+);
 router.delete("/:projectId/members/:userId", deleteProjectMember);
 router.get("/:id/tasks", getProjectTasks);
 router.get("/:id/activities", getProjectActivities);

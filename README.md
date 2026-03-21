@@ -36,7 +36,7 @@ ProjectManager is a full-stack SaaS platform for freelance and small-team develo
 - idx_project_members_project INDEX ON (project_id)
 - user_id **bigint** NOT NULL (FK -> users.id)
 - idx_project_members_user INDEX ON (user_id)
-- role **varchar(50)** NOT NULL CHECK (role IN (‘owner’,’maintainer’,’developer’,’viewer’))
+- role **varchar(50)** NOT NULL CHECK (role IN (‘owner’,’developer’,’tester’,’viewer’))
 - joined_at **datetime2**
 - created_at **datetime2** NOT NULL DEFAULT GETDATE()
 - UNIQUE (project_id, user_id)

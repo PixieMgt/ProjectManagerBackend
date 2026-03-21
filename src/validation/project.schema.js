@@ -32,7 +32,30 @@ const updateProjectSchema = z.object({
   deadline: z.coerce.date().optional(),
 });
 
+const createProjectMemberSchema = z.object({
+  projectId: z.number(),
+  userId: z.number(),
+  role: z.enum(["owner", "developer", "tester", "viewer"], {
+    require_error: "Role is required",
+    invalid_type_error: "Role must be one of: owner, developer, tester, viewer",
+  }),
+});
+
+const updateProjectMemberSchema = z.object({
+  projectId: z.number().optional(),
+  userId: z.number().optional(),
+  role: z
+    .enum(["owner", "developer", "tester", "viewer"], {
+      require_error: "Role is required",
+      invalid_type_error:
+        "Role must be one of: owner, developer, tester, viewer",
+    })
+    .optional(),
+});
+
 module.exports = {
   createProjectSchema,
   updateProjectSchema,
+  createProjectMemberSchema,
+  updateProjectMemberSchema,
 };

@@ -12,6 +12,16 @@ function toProjectModel(row) {
   };
 }
 
+function toProjectMemberModel(row) {
+  return {
+    id: row.id,
+    projectId: row.project_id,
+    userId: row.user_id,
+    role: row.role,
+  };
+}
+
 module.exports = {
   toProjectModel,
+  toProjectMemberModel,
 };

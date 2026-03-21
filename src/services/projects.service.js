@@ -13,6 +13,12 @@ const {
   toProjectModel,
   toProjectMemberModel,
 } = require("../models/project.model");
+const { toTaskModel } = require("../models/task.model");
+const { toInvoiceModel } = require("../models/invoice.model");
+const { findAllProjectTasks } = require("../repositories/tasks.repository");
+const {
+  findAllProjectInvoices,
+} = require("../repositories/invoices.repository");
 
 async function getAllProjects() {
   const projects = await findAllProjects();
@@ -92,6 +98,18 @@ async function deleteExistingProjectMember(projectId, userId) {
   return toProjectMemberModel(member);
 }
 
+async function getAllProjectTasks(id) {
+  const tasks = await findAllProjectTasks(id);
+  if (tasks.length === 0) return null;
+  return tasks.map(toTaskModel);
+}
+
+async function getAllProjectInvoices(id) {
+  const invoices = await findAllProjectInvoices(id);
+  if (invoices.length === 0) return null;
+  return invoices.map(toInvoiceModel);
+}
+
 module.exports = {
   getAllProjects,
   getProjectById,
@@ -102,4 +120,6 @@ module.exports = {
   createNewProjectMember,
   updateExistingProjectMember,
   deleteExistingProjectMember,
+  getAllProjectTasks,
+  getAllProjectInvoices,
 };

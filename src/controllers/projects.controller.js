@@ -8,6 +8,8 @@ const {
   createNewProjectMember,
   updateExistingProjectMember,
   deleteExistingProjectMember,
+  getAllProjectTasks,
+  getAllProjectInvoices,
 } = require("../services/projects.service");
 
 async function getProjects(req, res) {
@@ -164,10 +166,35 @@ async function deleteProjectMember(req, res) {
 
 async function getProjectTasks(req, res) {
   try {
-    res.status(200).json({ message: "under construction" });
+    const tasks = await getAllProjectTasks(req.params.id);
+    if (!tasks)
+      return res.status(404).json({
+        message: `Tasks for project with id ${req.params.id} not found`,
+      });
+    return res.status(200).json({ tasks });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function getProjectInvoices(req, res) {
+  try {
+    const invoices = await getAllProjectInvoices(req.params.id);
+    if (!invoices)
+      return res.status(404).json({
+        message: `Invoices for project with id ${req.params.id} not found`,
+      });
+    return res.status(200).json({ invoices });
+  } catch (e) {
+    console.error(e);
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 
@@ -190,15 +217,6 @@ async function getProjectDocuments(req, res) {
 }
 
 async function getProjectDeployments(req, res) {
-  try {
-    res.status(200).json({ message: "under construction" });
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ message: "Internal server error" });
-  }
-}
-
-async function getProjectInvoices(req, res) {
   try {
     res.status(200).json({ message: "under construction" });
   } catch (e) {

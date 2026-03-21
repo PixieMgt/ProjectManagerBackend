@@ -46,10 +46,10 @@ router.patch(
 );
 router.delete("/:projectId/members/:userId", deleteProjectMember);
 router.get("/:id/tasks", getProjectTasks);
+router.get("/:id/invoices", getProjectInvoices);
 router.get("/:id/activities", getProjectActivities);
 router.get("/:id/documents", getProjectDocuments);
 router.get("/:id/deployments", getProjectDeployments);
-router.get("/:id/invoices", getProjectInvoices);
 router.get("/:id/repositories", getProjectRepositories);
 router.post("/:id/repositories", createProjectRepository);
 router.delete("/:projectId/repositories/:repoId", deleteProjectRepository);

@@ -111,6 +111,16 @@ async function findAllClientInvoices(id) {
   }
 }
 
+async function findAllProjectInvoices(id) {
+  try {
+    const invoices = await db("invoices").where({ project_id: id }).select("*");
+    return invoices;
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
 module.exports = {
   findAllInvoices,
   findInvoice,
@@ -122,4 +132,5 @@ module.exports = {
   changeInvoiceItem,
   removeInvoiceItem,
   findAllClientInvoices,
+  findAllProjectInvoices,
 };

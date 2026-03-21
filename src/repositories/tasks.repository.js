@@ -60,6 +60,16 @@ async function findAllUserTasks(id) {
   }
 }
 
+async function findAllProjectTasks(id) {
+  try {
+    const tasks = await db("tasks").where({ project_id: id }).select("*");
+    return tasks;
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
 module.exports = {
   findAllTasks,
   findTask,
@@ -67,4 +77,5 @@ module.exports = {
   changeTask,
   removeTask,
   findAllUserTasks,
+  findAllProjectTasks,
 };

@@ -4,6 +4,7 @@ const {
   createNewTask,
   updateExistingTask,
   deleteExistingTask,
+  getAllTaskTimeEntries,
 } = require("../services/tasks.service");
 
 async function getTasks(req, res) {
@@ -85,10 +86,18 @@ async function deleteTask(req, res) {
 
 async function getTaskTimeEntries(req, res) {
   try {
-    res.status(200).json({ message: "under construction" });
+    const timeEntries = await getAllTaskTimeEntries(req.params.id);
+    if (!timeEntries)
+      return res.status(404).json({
+        message: `Time entries for task with id ${req.params.id} not found`,
+      });
+    return res.status(200).json({ timeEntries });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 

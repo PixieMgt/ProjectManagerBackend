@@ -6,6 +6,10 @@ const {
   removeTask,
 } = require("../repositories/tasks.repository");
 const { toTaskModel } = require("../models/task.model");
+const { toTimeEntryModel } = require("../models/time-entry.model");
+const {
+  findAllTaskTimeEntries,
+} = require("../repositories/time-entries.repository");
 
 async function getAllTasks() {
   const tasks = await findAllTasks();
@@ -29,7 +33,7 @@ async function createNewTask(data) {
     estimated_hours: data.estimated_hours,
   };
   const task = await insertTask(normalized);
-  return task;
+  return toTaskModel(task);
 }
 
 async function updateExistingTask(id, data) {
@@ -44,13 +48,19 @@ async function updateExistingTask(id, data) {
   };
   const task = await changeTask(id, normalized);
   if (!task) return null;
-  return task;
+  return toTaskModel(task);
 }
 
 async function deleteExistingTask(id) {
   const task = await removeTask(id);
   if (!task) return null;
-  return task;
+  return toTaskModel(task);
+}
+
+async function getAllTaskTimeEntries(id) {
+  const timeEntries = await findAllTaskTimeEntries(id);
+  if (timeEntries.length === 0) return null;
+  return timeEntries.map(toTimeEntryModel);
 }
 
 module.exports = {
@@ -59,4 +69,5 @@ module.exports = {
   createNewTask,
   updateExistingTask,
   deleteExistingTask,
+  getAllTaskTimeEntries,
 };

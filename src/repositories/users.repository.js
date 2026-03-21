@@ -60,10 +60,17 @@ async function removeUser(id) {
   }
 }
 
+async function authenticateUser(email) {
+  const user = await db("users").where({ email }).first();
+  if (!user) return null;
+  return user;
+}
+
 module.exports = {
   findAllUsers,
   findUser,
   insertUser,
   changeUser,
   removeUser,
+  authenticateUser,
 };

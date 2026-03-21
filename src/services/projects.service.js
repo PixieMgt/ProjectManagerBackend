@@ -8,6 +8,7 @@ const {
   insertProjectMember,
   changeProjectMember,
   removeProjectMember,
+  findProjectMemberRole,
 } = require("../repositories/projects.repository");
 const {
   toProjectModel,
@@ -73,6 +74,11 @@ async function getAllProjectMembers(id) {
   return members.map(toProjectMemberModel);
 }
 
+async function getProjectMemberRole(projectId, userId) {
+  const role = await findProjectMemberRole(projectId, userId);
+  return role;
+}
+
 async function createNewProjectMember(id, data) {
   const normalized = {
     project_id: id,
@@ -117,6 +123,7 @@ module.exports = {
   updateExistingProject,
   deleteExistingProject,
   getAllProjectMembers,
+  getProjectMemberRole,
   createNewProjectMember,
   updateExistingProjectMember,
   deleteExistingProjectMember,

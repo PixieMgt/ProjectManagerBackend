@@ -33,7 +33,6 @@ const updateProjectSchema = z.object({
 });
 
 const createProjectMemberSchema = z.object({
-  projectId: z.number(),
   userId: z.number(),
   role: z.enum(["owner", "developer", "tester", "viewer"], {
     require_error: "Role is required",
@@ -42,7 +41,6 @@ const createProjectMemberSchema = z.object({
 });
 
 const updateProjectMemberSchema = z.object({
-  projectId: z.number().optional(),
   userId: z.number().optional(),
   role: z
     .enum(["owner", "developer", "tester", "viewer"], {

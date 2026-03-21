@@ -64,6 +64,19 @@ async function findAllProjectMembers(id) {
   }
 }
 
+async function findProjectMemberRole(projectId, userId) {
+  try {
+    const role = await db("project_members")
+      .where({ project_id: projectId, user_id: userId })
+      .select("role")
+      .first();
+    return role;
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
 async function insertProjectMember(data) {
   try {
     const [row] = await db("project_members").insert(data).returning("*");
@@ -136,6 +149,7 @@ module.exports = {
   changeProject,
   removeProject,
   findAllProjectMembers,
+  findProjectMemberRole,
   insertProjectMember,
   changeProjectMember,
   removeProjectMember,

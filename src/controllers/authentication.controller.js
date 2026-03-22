@@ -2,6 +2,7 @@ const {
   registerNewUser,
   loginExistingUser,
 } = require("../services/authentication.service");
+const { getUserById } = require("../services/users.service");
 
 async function register(req, res) {
   try {
@@ -44,10 +45,14 @@ async function logout(req, res) {
 
 async function getCurrentUser(req, res) {
   try {
-    res.status(200).json({ message: "under construction" });
+    const user = await getUserById(req.user.userId);
+    return res.status(200).json({ user });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: "Internal server error" });
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 

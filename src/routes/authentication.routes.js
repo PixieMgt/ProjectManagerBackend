@@ -10,11 +10,12 @@ const {
   getCurrentUser,
   refresh,
 } = require("../controllers/authentication.controller");
+const { requireAuth } = require("../middleware/authentication.middleware");
 
 router.post("/register", validate(registerSchema), register);
 router.post("/login", validate(loginSchema), login);
 router.post("/logout", logout);
-router.get("/me", getCurrentUser);
+router.get("/me", requireAuth, getCurrentUser);
 router.post("/refresh", refresh);
 
 module.exports = router;

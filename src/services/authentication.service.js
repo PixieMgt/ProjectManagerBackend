@@ -1,5 +1,4 @@
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 
 const {
   insertUser,
@@ -26,13 +25,7 @@ async function loginExistingUser(data) {
   const authenticated = await bcrypt.compare(data.password, user.password_hash);
   if (!authenticated) return null;
 
-  return jwt.sign(
-    { userId: user.id, role: user.role },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "1h",
-    },
-  );
+  return user;
 }
 
 module.exports = {

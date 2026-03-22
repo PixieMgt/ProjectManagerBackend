@@ -24,11 +24,11 @@ async function getUsers(req, res) {
 
 async function getUser(req, res) {
   try {
-    const user = await getUserById(req.params.id);
+    const user = await getUserById(req.params.userId);
     if (!user)
       return res
         .status(404)
-        .json({ message: `User with id ${req.params.id} not found` });
+        .json({ message: `User with id ${req.params.userId} not found` });
     return res.status(200).json({ user });
   } catch (e) {
     console.error(e);
@@ -56,11 +56,11 @@ async function createUser(req, res) {
 
 async function updateUser(req, res) {
   try {
-    const user = await updateExistingUser(req.params.id, req.body);
+    const user = await updateExistingUser(req.params.userId, req.body);
     if (!user)
       return res
         .status(404)
-        .json({ message: `User with id ${req.params.id} not found` });
+        .json({ message: `User with id ${req.params.userId} not found` });
     return res.status(200).json({ user });
   } catch (e) {
     console.error(e);
@@ -75,11 +75,11 @@ async function updateUser(req, res) {
 
 async function deleteUser(req, res) {
   try {
-    const user = await deleteExistingUser(req.params.id);
+    const user = await deleteExistingUser(req.params.userId);
     if (!user)
       return res
         .status(404)
-        .json({ message: `User with id ${req.params.id} not found` });
+        .json({ message: `User with id ${req.params.userId} not found` });
     return res.status(200).json({ user });
   } catch (e) {
     console.error(e);
@@ -92,10 +92,10 @@ async function deleteUser(req, res) {
 
 async function getUserProjects(req, res) {
   try {
-    const projects = await getAllUserProjects(req.params.id);
+    const projects = await getAllUserProjects(req.params.userId);
     if (!projects)
       return res.status(404).json({
-        message: `Projects for user with id ${req.params.id} not found`,
+        message: `Projects for user with id ${req.params.userId} not found`,
       });
     return res.status(200).json({ projects });
   } catch (e) {
@@ -109,10 +109,10 @@ async function getUserProjects(req, res) {
 
 async function getUserTimeEntries(req, res) {
   try {
-    const timeEntries = await getAllUserTimeEntries(req.params.id);
+    const timeEntries = await getAllUserTimeEntries(req.params.userId);
     if (!timeEntries)
       return res.status(404).json({
-        message: `Time entries for user with id ${req.params.id} not found`,
+        message: `Time entries for user with id ${req.params.userId} not found`,
       });
     return res.status(200).json({ timeEntries });
   } catch (e) {
@@ -126,10 +126,10 @@ async function getUserTimeEntries(req, res) {
 
 async function getUserTasks(req, res) {
   try {
-    const tasks = await getAllUserTasks(req.params.id);
+    const tasks = await getAllUserTasks(userId);
     if (!tasks)
       return res.status(404).json({
-        message: `Tasks for user with id ${req.params.id} not found`,
+        message: `Tasks for user with id ${req.params.userId} not found`,
       });
     return res.status(200).json({ tasks });
   } catch (e) {

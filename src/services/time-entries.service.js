@@ -18,10 +18,16 @@ async function getTimeEntryById(id) {
   return toTimeEntryModel(timeEntry);
 }
 
-async function createNewTimeEntry(data) {
+async function getTimeEntryProjectId(id) {
+  const timeEntry = await getTimeEntryById(id);
+  if (!task) return null;
+  return timeEntry.projectId;
+}
+
+async function createNewTimeEntry(userId, data) {
   const normalized = {
     task_id: data.taskId,
-    user_id: data.userId,
+    user_id: userId,
     comment: data.comment,
     start_time: data.startTime,
     end_time: data.endTime,
@@ -32,8 +38,6 @@ async function createNewTimeEntry(data) {
 
 async function updateExistingTimeEntry(id, data) {
   const normalized = {
-    task_id: data.taskId,
-    user_id: data.userId,
     comment: data.comment,
     start_time: data.startTime,
     end_time: data.endTime,
@@ -52,6 +56,7 @@ async function deleteExistingTimeEntry(id) {
 module.exports = {
   getAllTimeEntries,
   getTimeEntryById,
+  getTimeEntryProjectId,
   createNewTimeEntry,
   updateExistingTimeEntry,
   deleteExistingTimeEntry,

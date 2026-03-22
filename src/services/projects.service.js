@@ -32,10 +32,10 @@ async function getProjectById(id) {
   return toProjectModel(project);
 }
 
-async function createNewProject(data) {
+async function createNewProject(userId, data) {
   const normalized = {
     client_id: data.clientId,
-    owner_user_id: data.ownerUserId,
+    owner_user_id: userId,
     name: data.name,
     description: data.description,
     status: data.status,
@@ -49,8 +49,6 @@ async function createNewProject(data) {
 
 async function updateExistingProject(id, data) {
   const normalized = {
-    client_id: data.clientId,
-    owner_user_id: data.ownerUserId,
     name: data.name,
     description: data.description,
     status: data.status,

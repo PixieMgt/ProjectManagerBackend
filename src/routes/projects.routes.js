@@ -27,31 +27,83 @@ const {
   createProjectRepository,
   deleteProjectRepository,
 } = require("../controllers/projects.controller");
+const {
+  requireAuth,
+  requireAdmin,
+  requireMinProjectRole,
+  requireClientOwner,
+} = require("../middleware/authentication.middleware");
 
-router.get("/", getProjects);
-router.get("/:id", getProject);
-router.post("/", validate(createProjectSchema), createProject);
-router.patch("/:id", validate(updateProjectSchema), updateProject);
-router.delete("/:id", deleteProject);
-router.get("/:id/members", getProjectMembers);
+router.get("/", requireAuth, requireAdmin, getProjects);
+router.get(
+  "/:projectId",
+  requireAuth,
+  requireMinProjectRole("viewer"),
+  getProject,
+);
 router.post(
-  "/:id/members",
+  "/",
+  requireAuth,
+  requireClientOwner,
+  validate(createProjectSchema),
+  createProject,
+);
+router.patch(
+  "/:projectId",
+  requireAuth,
+  requireMinProjectRole("developer"),
+  validate(updateProjectSchema),
+  updateProject,
+);
+router.delete(
+  "/:projectId",
+  requireAuth,
+  requireMinProjectRole("owner"),
+  deleteProject,
+);
+router.get(
+  "/:projectId/members",
+  requireAuth,
+  requireMinProjectRole("viewer"),
+  getProjectMembers,
+);
+router.post(
+  "/:projectId/members",
+  requireAuth,
+  requireMinProjectRole("owner"),
   validate(createProjectMemberSchema),
   createProjectMember,
 );
 router.patch(
   "/:projectId/members/:userId",
+  requireAuth,
+  requireMinProjectRole("owner"),
   validate(updateProjectMemberSchema),
   updateProjectMember,
 );
-router.delete("/:projectId/members/:userId", deleteProjectMember);
-router.get("/:id/tasks", getProjectTasks);
-router.get("/:id/invoices", getProjectInvoices);
-router.get("/:id/activities", getProjectActivities);
-router.get("/:id/documents", getProjectDocuments);
-router.get("/:id/deployments", getProjectDeployments);
-router.get("/:id/repositories", getProjectRepositories);
-router.post("/:id/repositories", createProjectRepository);
+router.delete(
+  "/:projectId/members/:userId",
+  requireAuth,
+  requireMinProjectRole("owner"),
+  deleteProjectMember,
+);
+router.get(
+  "/:projectId/tasks",
+  requireAuth,
+  requireMinProjectRole("viewer"),
+  getProjectTasks,
+);
+router.get(
+  "/:projectId/invoices",
+  requireAuth,
+  requireMinProjectRole("owner"),
+  getProjectInvoices,
+);
+router.get("/:projectId/activities", getProjectActivities);
+router.get("/:projectId/documents", getProjectDocuments);
+router.get("/:projectId/deployments", getProjectDeployments);
+router.get("/:projectId/repositories", getProjectRepositories);
+router.post("/:projectId/repositories", createProjectRepository);
 router.delete("/:projectId/repositories/:repoId", deleteProjectRepository);
 
 module.exports = router;

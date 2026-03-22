@@ -1,6 +1,10 @@
 const jwt = require("jsonwebtoken");
 
 const { getProjectMemberRole } = require("../services/projects.service");
+const { getClientOwner } = require("../services/clients.service");
+const { getTaskProjectId } = require("../services/tasks.service");
+const { getTimeEntryProjectId } = require("../services/time-entries.service");
+const { getInvoiceProjectId } = require("../services/invoices.service");
 
 function requireAuth(req, res, next) {
   const token = req.headers.authorization;
@@ -15,37 +19,99 @@ function requireAuth(req, res, next) {
   }
 }
 
-function requireGlobalRole(...roles) {
-  return (req, res, next) => {
-    if (!roles.includes(req.user.role))
+function requireMinProjectRole(minRole) {
+  return async (req, res, next) => {
+    if (req.user.role === "admin") return next();
+
+    const projectId = resolveProjectId(req);
+    if (!projectId)
+      return res
+        .status(400)
+        .json({ message: "Failed to determine project ID" });
+
+    const member = await getProjectMemberRole(projectId, req.user.userId);
+    if (!member)
+      return res.status(403).json({ message: "Not a project member" });
+
+    const ROLE_LEVELS = {
+      viewer: 1,
+      tester: 2,
+      developer: 3,
+      owner: 4,
+    };
+    const memberAccessLevel = ROLE_LEVELS[member.role];
+    const requiredAccessLevel = ROLE_LEVELS[minRole];
+
+    if (memberAccessLevel < requiredAccessLevel)
       return res.status(403).json({ message: "Access denied" });
+
     next();
   };
 }
 
-function requireProjectRole(role) {
-  return async (req, res, next) => {
-    const member = await getProjectMemberRole(
-      req.params.projectId,
-      req.user.userId,
-    );
-    if (!member)
-      return res.status(403).json({ message: "Not a project member" });
-    if (member.role !== role)
-      return res.status(403).json({ message: "Access denied" });
-    next();
-  };
+function requireAdmin(req, res, next) {
+  if (req.user.role === "admin")
+    return res.status(403).json({ message: "Access denied" });
+  next();
 }
 
 function requireSelfOrAdmin(req, res, next) {
   if (req.user.role === "admin") return next();
-  if (Number(req.params.id) === req.user.userId) return next();
+  if (Number(req.params.userId) === req.user.userId) return next();
   return res.status(403).json({ message: "Access denied" });
+}
+
+async function requireClientOwner(req, res, next) {
+  if (req.user.role === "admin") return next();
+
+  const clientId = resolveClientId(req);
+  if (!clientId)
+    return res.status(400).json({ message: "Failed to determine client ID" });
+
+  const clientOwnerId = await getClientOwner(clientId);
+  if (req.user.userId !== clientOwnerId)
+    return res.status(403).json({ message: "Access denied" });
+
+  next();
 }
 
 module.exports = {
   requireAuth,
-  requireGlobalRole,
-  requireProjectRole,
+  requireMinProjectRole,
+  requireAdmin,
   requireSelfOrAdmin,
+  requireClientOwner,
 };
+
+function resolveProjectId(req) {
+  const sources = [
+    () => req.params.projectId,
+    () => req.body.projectId,
+    async () =>
+      req.params.taskId && (await getTaskProjectId(req.params.taskId)),
+    async () => req.body.taskId && (await getTaskProjectId(req.body.taskId)),
+    async () =>
+      req.params.timeEntryId &&
+      (await getTimeEntryProjectId(req.params.timeEntryId)),
+    async () =>
+      req.params.invoiceId && (await getInvoiceProjectId(req.params.invoiceId)),
+  ];
+
+  for (const getId of sources) {
+    const id = getId();
+    if (id) return id;
+  }
+
+  return null;
+}
+
+function resolveClientId(req) {
+  const sources = [() => req.params.clientId, () => req.body.clientId];
+
+  for (const getId of sources) {
+    const id = getId();
+    if (id) return id;
+  }
+
+  return null;
+}

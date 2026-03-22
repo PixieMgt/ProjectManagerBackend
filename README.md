@@ -37,7 +37,6 @@ ProjectManager is a full-stack SaaS platform for freelance and small-team develo
 - user_id **bigint** NOT NULL (FK -> users.id)
 - idx_project_members_user INDEX ON (user_id)
 - role **varchar(50)** NOT NULL CHECK (role IN (‘owner’,’developer’,’tester’,’viewer’))
-- joined_at **datetime2**
 - created_at **datetime2** NOT NULL DEFAULT GETDATE()
 - UNIQUE (project_id, user_id)
 ### tasks
@@ -163,41 +162,41 @@ ProjectManager is a full-stack SaaS platform for freelance and small-team develo
 
 ## API Endpoints
 ### authentication
-- POST /auth/register
-- POST /auth/login
+- POST /auth/register (no auth)
+- POST /auth/login (no auth)
 - POST /auth/logout
 - GET /auth/me
 - POST /auth/refresh
 ### users
-- GET /users
-- GET /users/:id
-- POST /users
-- PATCH /users/:id
-- DELETE /users/:id
-- GET /users/:id/projects
-- GET /users/:id/time-entries
+- GET /users (requireAdmin)
+- GET /users/:id (requireSelf)
+- POST /users (requireAdmin)
+- PATCH /users/:id (requireAdmin)
+- DELETE /users/:id (requireAdmin)
+- GET /users/:id/projects (requireSelf)
+- GET /users/:id/tasks (requireSelf)
+- GET /users/:id/time-entries (requireSelf)
 - GET /users/:id/activities
-- GET /users/:id/tasks
 ### clients
-- GET /clients
-- GET /clients/:id
-- POST /clients
-- PATCH /clients/:id
-- DELETE /clients/:id
-- GET /clients/:id/projects
-- GET /clients/:id/invoices
+- GET /clients (requireAdmin)
+- GET /clients/:id (requireClientOwner)
+- POST /clients (requireClientOwner)
+- PATCH /clients/:id (requireClientOwner)
+- DELETE /clients/:id (requireClientOwner)
+- GET /clients/:id/projects (requireClientOwner)
+- GET /clients/:id/invoices (requireClientOwner)
 ### projects
-- GET /projects
-- GET /projects/:id
-- POST /projects
-- PATCH /projects/:id
-- DELETE /projects/:id
-- GET /projects/:id/members
-- POST /projects/:id/members
-- PATCH /projects/:projectId/members/:userId
-- DELETE /projects/:projectId/members/:userId
-- GET /projects/:id/tasks
-- GET /projects/:id/invoices
+- GET /projects (requireAdmin)
+- GET /projects/:id (requireMinProjectRole(viewer))
+- POST /projects (requireClientOwner)
+- PATCH /projects/:id (requireMinProjectRole(developer))
+- DELETE /projects/:id (requireMinProjectRole(owner))
+- GET /projects/:id/members (requireMinProjectRole(viewer))
+- POST /projects/:id/members (requireMinProjectRole(owner))
+- PATCH /projects/:projectId/members/:userId (requireMinProjectRole(owner))
+- DELETE /projects/:projectId/members/:userId (requireMinProjectRole(owner))
+- GET /projects/:id/tasks (requireMinProjectRole(viewer))
+- GET /projects/:id/invoices (requireMinProjectRole(owner))
 - GET /projects/:id/activities
 - GET /projects/:id/docs
 - GET /projects/:id/deployments
@@ -205,21 +204,21 @@ ProjectManager is a full-stack SaaS platform for freelance and small-team develo
 - POST /projects/:id/repositories
 - DELETE /projects/:projectId/repositories/:repoId
 ### tasks
-- GET /tasks
-- GET /tasks/:id
-- POST /tasks
-- PATCH /tasks/:id
-- DELETE /tasks/:id
-- GET /tasks/:id/time-entries
+- GET /tasks (requireAdmin)
+- GET /tasks/:id (requireMinProjectRole(viewer))
+- POST /tasks (requireMinProjectRole(tester))
+- PATCH /tasks/:id (requireMinProjectRole(tester))
+- DELETE /tasks/:id (requireMinProjectRole(owner))
+- GET /tasks/:id/time-entries (requireMinProjectRole(viewer))
 - GET /tasks/:id/commits
 - POST /tasks/:id/commits
 - DELETE /tasks/:taskId/commits/:commitId
 ### time-entries
-- GET /time-entries
-- GET /time-entries/:id
-- POST /time-entries
-- PATCH /time-entries/:id
-- DELETE /time-entries/:id
+- GET /time-entries (requireAdmin)
+- GET /time-entries/:id (requireMinProjectRole(viewer))
+- POST /time-entries (requireMinProjectRole(tester))
+- PATCH /time-entries/:id (requireMinProjectRole(tester))
+- DELETE /time-entries/:id (requireMinProjectRole(owner))
 ### repositories
 - GET /repositories
 - GET /repositories/:id
@@ -236,15 +235,15 @@ ProjectManager is a full-stack SaaS platform for freelance and small-team develo
 - GET /deployments/:id
 - POST /deployments
 ### invoices
-- GET /invoices
-- GET /invoices/:id
-- POST /invoices
-- PATCH /invoices/:id
-- DELETE /invoices/:id
-- GET /invoices/:id/items
-- POST /invoices/:id/items
-- PATCH /invoices/:invoiceId/items/:itemId
-- DELETE /invoices/:invoiceId/items/:itemId
+- GET /invoices (requireAdmin)
+- GET /invoices/:id (requireMinProjectRole(owner))
+- POST /invoices (requireClientOwner, requireMinProjectRole(owner))
+- PATCH /invoices/:id (requireMinProjectRole(owner))
+- DELETE /invoices/:id (requireMinProjectRole(owner))
+- GET /invoices/:id/items (requireMinProjectRole(owner))
+- POST /invoices/:id/items (requireMinProjectRole(owner))
+- PATCH /invoices/:invoiceId/items/:itemId (requireMinProjectRole(owner))
+- DELETE /invoices/:invoiceId/items/:itemId (requireMinProjectRole(owner))
 ### documents
 - GET /documents/:id
 - POST /documents

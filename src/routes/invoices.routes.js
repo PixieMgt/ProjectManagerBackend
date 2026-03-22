@@ -19,19 +19,62 @@ const {
   updateInvoiceItem,
   deleteInvoiceItem,
 } = require("../controllers/invoices.controller");
+const {
+  requireAuth,
+  requireAdmin,
+  requireMinProjectRole,
+  requireClientOwner,
+} = require("../middleware/authentication.middleware");
 
-router.get("/", getInvoices);
-router.get("/:id", getInvoice);
-router.post("/", validate(createInvoiceSchema), createInvoice);
-router.patch("/:id", validate(updateInvoiceSchema), updateInvoice);
-router.delete("/:id", deleteInvoice);
-router.get("/:id/items", getInvoiceItems);
-router.post("/:id/items", validate(createInvoiceItemSchema), createInvoiceItem);
+router.get("/", requireAuth, requireAdmin, getInvoices);
+router.get(
+  "/:invoiceId",
+  requireAuth,
+  requireMinProjectRole("owner"),
+  getInvoice,
+);
+router.post(
+  "/",
+  requireAuth,
+  requireClientOwner,
+  requireMinProjectRole("owner"),
+  validate(createInvoiceSchema),
+  createInvoice,
+);
+router.patch(
+  "/:invoiceId",
+  requireAuth,
+  requireMinProjectRole("owner"),
+  validate(updateInvoiceSchema),
+  updateInvoice,
+);
+router.delete(
+  "/:invoiceId",
+  requireAuth,
+  requireMinProjectRole("owner"),
+  deleteInvoice,
+);
+router.get("/:invoiceId/items", requireAuth, getInvoiceItems);
+router.post(
+  "/:invoiceId/items",
+  requireAuth,
+  requireClientOwner,
+  requireMinProjectRole("owner"),
+  validate(createInvoiceItemSchema),
+  createInvoiceItem,
+);
 router.patch(
   "/:invoiceId/items/:itemId",
+  requireAuth,
+  requireMinProjectRole("owner"),
   validate(updateInvoiceItemSchema),
   updateInvoiceItem,
 );
-router.delete("/:invoiceId/items/:itemId", deleteInvoiceItem);
+router.delete(
+  "/:invoiceId/items/:itemId",
+  requireAuth,
+  requireMinProjectRole("owner"),
+  deleteInvoiceItem,
+);
 
 module.exports = router;

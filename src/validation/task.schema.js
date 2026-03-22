@@ -2,7 +2,6 @@ const { z } = require("zod");
 
 const createTaskSchema = z.object({
   projectId: z.number(),
-  ownerUserId: z.number(),
   title: z.string("Title is required").min(1, "Title can't be empty"),
   description: z.string().optional(),
   status: z
@@ -21,8 +20,6 @@ const createTaskSchema = z.object({
 });
 
 const updateTaskSchema = z.object({
-  projectId: z.number().optional(),
-  ownerUserId: z.number().optional(),
   title: z.string().min(1, "Title can't be empty").optional(),
   description: z.string().optional(),
   status: z

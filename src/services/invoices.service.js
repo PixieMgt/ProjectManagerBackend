@@ -25,6 +25,12 @@ async function getInvoiceById(id) {
   return toInvoiceModel(invoice);
 }
 
+async function getInvoiceProjectId(id) {
+  const invoice = getInvoiceById(id);
+  if (!invoice) return null;
+  return invoice.projectId;
+}
+
 async function createNewInvoice(data) {
   const normalized = {
     client_id: data.clientId,
@@ -39,8 +45,6 @@ async function createNewInvoice(data) {
 
 async function updateExistingInvoice(id, data) {
   const normalized = {
-    client_id: data.clientId,
-    project_id: data.projectId,
     status: data.status,
     issue_date: data.issueDate,
     due_date: data.dueDate,
@@ -94,6 +98,7 @@ async function deleteExistingInvoiceItem(id) {
 module.exports = {
   getAllInvoices,
   getInvoiceById,
+  getInvoiceProjectId,
   createNewInvoice,
   updateExistingInvoice,
   deleteExistingInvoice,

@@ -13,11 +13,38 @@ const {
   updateTimeEntry,
   deleteTimeEntry,
 } = require("../controllers/time-entries.controller");
+const {
+  requireAuth,
+  requireAdmin,
+  requireMinProjectRole,
+} = require("../middleware/authentication.middleware");
 
-router.get("/", getTimeEntries);
-router.get("/:id", getTimeEntry);
-router.post("/", validate(createTimeEntrySchema), createTimeEntry);
-router.patch("/:id", validate(updateTimeEntrySchema), updateTimeEntry);
-router.delete("/:id", deleteTimeEntry);
+router.get("/", requireAuth, requireAdmin, getTimeEntries);
+router.get(
+  "/:timeEntryId",
+  requireAuth,
+  requireMinProjectRole("viewer"),
+  getTimeEntry,
+);
+router.post(
+  "/",
+  requireAuth,
+  requireMinProjectRole("tester"),
+  validate(createTimeEntrySchema),
+  createTimeEntry,
+);
+router.patch(
+  "/:timeEntryId",
+  requireAuth,
+  requireMinProjectRole("tester"),
+  validate(updateTimeEntrySchema),
+  updateTimeEntry,
+);
+router.delete(
+  "/:timeEntryId",
+  requireAuth,
+  requireMinProjectRole("owner"),
+  deleteTimeEntry,
+);
 
 module.exports = router;

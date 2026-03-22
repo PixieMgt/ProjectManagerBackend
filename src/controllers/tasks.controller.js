@@ -39,7 +39,7 @@ async function getTask(req, res) {
 
 async function createTask(req, res) {
   try {
-    const task = await createNewTask(req.body);
+    const task = await createNewTask(req.user.userId, req.body);
     return res.status(200).json({ task });
   } catch (e) {
     console.error(e);

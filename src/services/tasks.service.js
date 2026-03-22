@@ -22,10 +22,16 @@ async function getTaskById(id) {
   return toTaskModel(task);
 }
 
-async function createNewTask(data) {
+async function getTaskProjectId(id) {
+  const task = await getTaskById(id);
+  if (!task) return null;
+  return task.projectId;
+}
+
+async function createNewTask(userId, data) {
   const normalized = {
     project_id: data.projectId,
-    owner_user_id: data.ownerUserId,
+    owner_user_id: userId,
     title: data.title,
     description: data.description,
     status: data.status,
@@ -38,8 +44,6 @@ async function createNewTask(data) {
 
 async function updateExistingTask(id, data) {
   const normalized = {
-    project_id: data.projectId,
-    owner_user_id: data.ownerUserId,
     title: data.title,
     description: data.description,
     status: data.status,
@@ -66,6 +70,7 @@ async function getAllTaskTimeEntries(id) {
 module.exports = {
   getAllTasks,
   getTaskById,
+  getTaskProjectId,
   createNewTask,
   updateExistingTask,
   deleteExistingTask,

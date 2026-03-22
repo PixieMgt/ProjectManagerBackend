@@ -26,19 +26,32 @@ async function getClientById(id) {
   return toClientModel(client);
 }
 
-async function createNewClient(data) {
+async function getClientOwner(id) {
+  const client = getClientById(id);
+  if (!client) return null;
+  return client.owner_user_id;
+}
+
+async function createNewClient(userId, data) {
+  const normalized = {
+    owner_user_id: userId,
+    name: data.name,
+    email: data.email,
+    phone: data.phone,
+    notes: data.notes,
+  };
+  const client = await insertClient(normalized);
+  return toClientModel(client);
+}
+
+async function updateExistingClient(id, data) {
   const normalized = {
     name: data.name,
     email: data.email,
     phone: data.phone,
     notes: data.notes,
   };
-  const client = await insertClient(data);
-  return toClientModel(client);
-}
-
-async function updateExistingClient(id, data) {
-  const client = await changeClient(id, data);
+  const client = await changeClient(id, normalized);
   if (!client) return null;
   return toClientModel(client);
 }
@@ -64,6 +77,7 @@ async function getAllClientInvoices(id) {
 module.exports = {
   getAllClients,
   getClientById,
+  getClientOwner,
   createNewClient,
   updateExistingClient,
   deleteExistingClient,

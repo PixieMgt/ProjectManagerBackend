@@ -13,8 +13,6 @@ const createInvoiceSchema = z.object({
 });
 
 const updateInvoiceSchema = z.object({
-  clientId: z.number().optional(),
-  projectId: z.number().optional(),
   status: z
     .enum(["draft", "sent", "paid", "overdue"], {
       invalid_type_error: "Status must be one of: draft, sent, paid, overdue",

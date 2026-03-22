@@ -17,15 +17,42 @@ const {
   getUserActivities,
   getUserTasks,
 } = require("../controllers/users.controller");
+const {
+  requireAuth,
+  requireSelfOrAdmin,
+  requireAdmin,
+} = require("../middleware/authentication.middleware");
 
-router.get("/", getUsers);
-router.get("/:id", getUser);
-router.post("/", validate(createUserSchema), createUser);
-router.patch("/:id", validate(updateUserSchema), updateUser);
-router.delete("/:id", deleteUser);
-router.get("/:id/projects", getUserProjects);
-router.get("/:id/time-entries", getUserTimeEntries);
-router.get("/:id/tasks", getUserTasks);
-router.get("/:id/activities", getUserActivities);
+router.get("/", requireAuth, requireAdmin, getUsers);
+router.get("/:userId", requireAuth, requireSelfOrAdmin, getUser);
+router.post(
+  "/",
+  requireAuth,
+  requireAdmin,
+  validate(createUserSchema),
+  createUser,
+);
+router.patch(
+  "/:userId",
+  requireAuth,
+  requireAdmin,
+  validate(updateUserSchema),
+  updateUser,
+);
+router.delete("/:userId", requireAuth, requireAdmin, deleteUser);
+router.get(
+  "/:userId/projects",
+  requireAuth,
+  requireSelfOrAdmin,
+  getUserProjects,
+);
+router.get("/:userId/tasks", requireAuth, requireSelfOrAdmin, getUserTasks);
+router.get(
+  "/:userId/time-entries",
+  requireAuth,
+  requireSelfOrAdmin,
+  getUserTimeEntries,
+);
+router.get("/:userId/activities", getUserActivities);
 
 module.exports = router;

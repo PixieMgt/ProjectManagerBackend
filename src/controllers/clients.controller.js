@@ -23,11 +23,11 @@ async function getClients(req, res) {
 
 async function getClient(req, res) {
   try {
-    const client = await getClientById(req.params.id);
+    const client = await getClientById(req.params.clientId);
     if (!client)
       return res
         .status(404)
-        .json({ message: `Client with id ${req.params.id} not found` });
+        .json({ message: `Client with id ${req.params.clientId} not found` });
     return res.status(200).json({ client });
   } catch (e) {
     console.error(e);
@@ -40,7 +40,7 @@ async function getClient(req, res) {
 
 async function createClient(req, res) {
   try {
-    const client = await createNewClient(req.body);
+    const client = await createNewClient(req.user.userId, req.body);
     return res.status(200).json({ client });
   } catch (e) {
     console.error(e);
@@ -53,11 +53,11 @@ async function createClient(req, res) {
 
 async function updateClient(req, res) {
   try {
-    const client = await updateExistingClient(req.params.id, req.body);
+    const client = await updateExistingClient(req.params.clientId, req.body);
     if (!client)
       return res
         .status(404)
-        .json({ message: `Client with id ${req.params.id} not found` });
+        .json({ message: `Client with id ${req.params.clientId} not found` });
     return res.status(200).json({ client });
   } catch (e) {
     console.error(e);
@@ -70,11 +70,11 @@ async function updateClient(req, res) {
 
 async function deleteClient(req, res) {
   try {
-    const client = await deleteExistingClient(req.params.id);
+    const client = await deleteExistingClient(req.params.clientId);
     if (!client)
       return res
         .status(404)
-        .json({ message: `Client with id ${req.params.id} not found` });
+        .json({ message: `Client with id ${req.params.clientId} not found` });
     return res.status(200).json({ client });
   } catch (e) {
     console.error(e);
@@ -87,10 +87,10 @@ async function deleteClient(req, res) {
 
 async function getClientProjects(req, res) {
   try {
-    const projects = await getAllClientProjects(req.params.id);
+    const projects = await getAllClientProjects(req.params.clientId);
     if (!projects)
       return res.status(404).json({
-        message: `Projects for client with id ${req.params.id} not found`,
+        message: `Projects for client with id ${req.params.clientId} not found`,
       });
     return res.status(200).json({ projects });
   } catch (e) {
@@ -104,10 +104,10 @@ async function getClientProjects(req, res) {
 
 async function getClientInvoices(req, res) {
   try {
-    const invoices = await getAllClientInvoices(req.params.id);
+    const invoices = await getAllClientInvoices(req.params.clientId);
     if (!invoices)
       return res.status(404).json({
-        message: `Invoices for client with id ${req.params.id} not found`,
+        message: `Invoices for client with id ${req.params.clientId} not found`,
       });
     return res.status(200).json({ invoices });
   } catch (e) {

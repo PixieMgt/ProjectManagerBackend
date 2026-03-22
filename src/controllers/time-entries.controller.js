@@ -38,7 +38,7 @@ async function getTimeEntry(req, res) {
 
 async function createTimeEntry(req, res) {
   try {
-    const timeEntry = await createNewTimeEntry(req.body);
+    const timeEntry = await createNewTimeEntry(req.user.userId, req.body);
     return res.status(200).json({ time_entry: timeEntry });
   } catch (e) {
     console.error(e);

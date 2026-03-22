@@ -27,11 +27,11 @@ async function getProjects(req, res) {
 
 async function getProject(req, res) {
   try {
-    const project = await getProjectById(req.params.id);
+    const project = await getProjectById(req.params.projectId);
     if (!project)
       return res
         .status(404)
-        .json({ message: `Project with id ${req.params.id} not found` });
+        .json({ message: `Project with id ${req.params.projectId} not found` });
     return res.status(200).json({ project });
   } catch (e) {
     console.error(e);
@@ -44,7 +44,7 @@ async function getProject(req, res) {
 
 async function createProject(req, res) {
   try {
-    const project = await createNewProject(req.body);
+    const project = await createNewProject(req.user.userId, req.body);
     return res.status(200).json({ project });
   } catch (e) {
     console.error(e);
@@ -57,11 +57,11 @@ async function createProject(req, res) {
 
 async function updateProject(req, res) {
   try {
-    const project = await updateExistingProject(req.params.id, req.body);
+    const project = await updateExistingProject(req.params.projectId, req.body);
     if (!project)
       return res
         .status(404)
-        .json({ message: `Project with id ${req.params.id} not found` });
+        .json({ message: `Project with id ${req.params.projectId} not found` });
     return res.status(200).json({ project });
   } catch (e) {
     console.error(e);
@@ -74,11 +74,11 @@ async function updateProject(req, res) {
 
 async function deleteProject(req, res) {
   try {
-    const project = await deleteExistingProject(req.params.id);
+    const project = await deleteExistingProject(req.params.projectId);
     if (!project)
       return res
         .status(404)
-        .json({ message: `Project with id ${req.params.id} not found` });
+        .json({ message: `Project with id ${req.params.projectId} not found` });
     return res.status(200).json({ project });
   } catch (e) {
     console.error(e);
@@ -91,10 +91,10 @@ async function deleteProject(req, res) {
 
 async function getProjectMembers(req, res) {
   try {
-    const members = await getAllProjectMembers(req.params.id);
+    const members = await getAllProjectMembers(req.params.projectId);
     if (!members)
       return res.status(404).json({
-        message: `Project members for project with id ${req.params.id} not found`,
+        message: `Project members for project with id ${req.params.projectId} not found`,
       });
     return res.status(200).json({ members });
   } catch (e) {
@@ -108,7 +108,7 @@ async function getProjectMembers(req, res) {
 
 async function createProjectMember(req, res) {
   try {
-    const member = await createNewProjectMember(req.params.id, req.body);
+    const member = await createNewProjectMember(req.params.projectId, req.body);
     return res.status(200).json({ member });
   } catch (e) {
     console.error(e);
@@ -166,10 +166,10 @@ async function deleteProjectMember(req, res) {
 
 async function getProjectTasks(req, res) {
   try {
-    const tasks = await getAllProjectTasks(req.params.id);
+    const tasks = await getAllProjectTasks(req.params.projectId);
     if (!tasks)
       return res.status(404).json({
-        message: `Tasks for project with id ${req.params.id} not found`,
+        message: `Tasks for project with id ${req.params.projectId} not found`,
       });
     return res.status(200).json({ tasks });
   } catch (e) {
@@ -183,10 +183,10 @@ async function getProjectTasks(req, res) {
 
 async function getProjectInvoices(req, res) {
   try {
-    const invoices = await getAllProjectInvoices(req.params.id);
+    const invoices = await getAllProjectInvoices(req.params.projectId);
     if (!invoices)
       return res.status(404).json({
-        message: `Invoices for project with id ${req.params.id} not found`,
+        message: `Invoices for project with id ${req.params.projectId} not found`,
       });
     return res.status(200).json({ invoices });
   } catch (e) {

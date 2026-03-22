@@ -2,7 +2,6 @@ const { z, date } = require("zod");
 
 const createProjectSchema = z.object({
   clientId: z.number().int().positive("Invalid client ID"),
-  ownerUserId: z.number().int().positive("Invalid owner user ID"),
   name: z.string("Name is required").min(1, "Name can't be empty"),
   description: z.string().optional(),
   status: z
@@ -17,8 +16,6 @@ const createProjectSchema = z.object({
 });
 
 const updateProjectSchema = z.object({
-  clientId: z.number().int().positive("Invalid client ID").optional(),
-  ownerUserId: z.number().int().positive("Invalid owner user ID").optional(),
   name: z.string().min(1, "Name is required").optional(),
   description: z.string().optional(),
   status: z

@@ -7,6 +7,7 @@ const {
   getAllUserProjects,
   getAllUserTimeEntries,
   getAllUserTasks,
+  getAllUserClients,
 } = require("../services/users.service");
 
 async function getUsers(req, res) {
@@ -126,12 +127,29 @@ async function getUserTimeEntries(req, res) {
 
 async function getUserTasks(req, res) {
   try {
-    const tasks = await getAllUserTasks(userId);
+    const tasks = await getAllUserTasks(req.params.userId);
     if (!tasks)
       return res.status(404).json({
         message: `Tasks for user with id ${req.params.userId} not found`,
       });
     return res.status(200).json({ tasks });
+  } catch (e) {
+    console.error(e);
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function getUserClients(req, res) {
+  try {
+    const clients = await getAllUserClients(req.params.userId);
+    if (!clients)
+      return res.status(404).json({
+        message: `Clients for user with id ${req.params.userId} not found`,
+      });
+    return res.status(200).json({ clients });
   } catch (e) {
     console.error(e);
 
@@ -160,4 +178,5 @@ module.exports = {
   getUserTimeEntries,
   getUserActivities,
   getUserTasks,
+  getUserClients,
 };

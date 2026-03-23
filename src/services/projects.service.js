@@ -44,6 +44,11 @@ async function createNewProject(userId, data) {
     deadline: data.deadline,
   };
   const project = await insertProject(normalized);
+  await insertProjectMember({
+    project_id: project.id,
+    user_id: userId,
+    role: "owner",
+  });
   return toProjectModel(project);
 }
 

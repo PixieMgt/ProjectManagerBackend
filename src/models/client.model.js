@@ -1,6 +1,7 @@
 function toClientModel(row) {
   return {
     id: row.id,
+    ownerUserId: row.owner_user_id,
     name: row.name,
     company: row.company,
     email: row.email,

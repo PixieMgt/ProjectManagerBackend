@@ -50,10 +50,23 @@ async function removeClient(id) {
   }
 }
 
+async function findAllUserClients(id) {
+  try {
+    const clients = await db("clients")
+      .where({ owner_user_id: id })
+      .select("*");
+    return clients;
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
 module.exports = {
   findAllClients,
   findClient,
   insertClient,
   changeClient,
   removeClient,
+  findAllUserClients,
 };

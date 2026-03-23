@@ -27,9 +27,10 @@ async function getClientById(id) {
 }
 
 async function getClientOwner(id) {
-  const client = getClientById(id);
+  const client = await getClientById(id);
+  console.log(client);
   if (!client) return null;
-  return client.owner_user_id;
+  return client.ownerUserId;
 }
 
 async function createNewClient(userId, data) {

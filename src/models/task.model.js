@@ -1,13 +1,13 @@
 function toTaskModel(row) {
   return {
     id: row.id,
-    projectId: row.projectId,
-    ownerUserId: row.ownerUserId,
+    projectId: row.project_id,
+    ownerUserId: row.owner_user_id,
     title: row.title,
     description: row.description,
     status: row.status,
     priority: row.priority,
-    estimatedHours: row.estimatedHours,
+    estimatedHours: row.estimated_hours,
   };
 }
 

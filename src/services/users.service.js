@@ -16,6 +16,8 @@ const { toUserModel } = require("../models/user.model");
 const { toProjectModel } = require("../models/project.model");
 const { toTimeEntryModel } = require("../models/time-entry.model");
 const { toTaskModel } = require("../models/task.model");
+const { findAllUserClients } = require("../repositories/clients.repository");
+const { toClientModel } = require("../models/client.model");
 
 async function getAllUsers() {
   const users = await findAllUsers();
@@ -79,6 +81,12 @@ async function getAllUserTasks(id) {
   return tasks.map(toTaskModel);
 }
 
+async function getAllUserClients(id) {
+  const clients = await findAllUserClients(id);
+  if (clients.length === 0) return null;
+  return clients.map(toClientModel);
+}
+
 module.exports = {
   getAllUsers,
   getUserById,
@@ -88,4 +96,5 @@ module.exports = {
   getAllUserProjects,
   getAllUserTimeEntries,
   getAllUserTasks,
+  getAllUserClients,
 };

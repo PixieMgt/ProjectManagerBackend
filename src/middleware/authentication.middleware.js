@@ -23,7 +23,7 @@ function requireMinProjectRole(minRole) {
   return async (req, res, next) => {
     if (req.user.role === "admin") return next();
 
-    const projectId = resolveProjectId(req);
+    const projectId = await resolveProjectId(req);
     if (!projectId)
       return res
         .status(400)
@@ -55,9 +55,9 @@ function requireAdmin(req, res, next) {
   next();
 }
 
-function requireSelfOrAdmin(req, res, next) {
+function requireSelf(req, res, next) {
   if (req.user.role === "admin") return next();
-  if (Number(req.params.userId) === req.user.userId) return next();
+  if (req.params.userId === req.user.userId) return next();
   return res.status(403).json({ message: "Access denied" });
 }
 
@@ -79,11 +79,11 @@ module.exports = {
   requireAuth,
   requireMinProjectRole,
   requireAdmin,
-  requireSelfOrAdmin,
+  requireSelf,
   requireClientOwner,
 };
 
-function resolveProjectId(req) {
+async function resolveProjectId(req) {
   const sources = [
     () => req.params.projectId,
     () => req.body.projectId,
@@ -98,18 +98,18 @@ function resolveProjectId(req) {
   ];
 
   for (const getId of sources) {
-    const id = getId();
+    const id = await getId();
     if (id) return id;
   }
 
   return null;
 }
 
-function resolveClientId(req) {
+async function resolveClientId(req) {
   const sources = [() => req.params.clientId, () => req.body.clientId];
 
   for (const getId of sources) {
-    const id = getId();
+    const id = await getId();
     if (id) return id;
   }
 

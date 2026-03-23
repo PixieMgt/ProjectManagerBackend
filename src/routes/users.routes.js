@@ -16,15 +16,16 @@ const {
   getUserTimeEntries,
   getUserActivities,
   getUserTasks,
+  getUserClients,
 } = require("../controllers/users.controller");
 const {
   requireAuth,
-  requireSelfOrAdmin,
+  requireSelf,
   requireAdmin,
 } = require("../middleware/authentication.middleware");
 
 router.get("/", requireAuth, requireAdmin, getUsers);
-router.get("/:userId", requireAuth, requireSelfOrAdmin, getUser);
+router.get("/:userId", requireAuth, requireSelf, getUser);
 router.post(
   "/",
   requireAuth,
@@ -40,19 +41,15 @@ router.patch(
   updateUser,
 );
 router.delete("/:userId", requireAuth, requireAdmin, deleteUser);
-router.get(
-  "/:userId/projects",
-  requireAuth,
-  requireSelfOrAdmin,
-  getUserProjects,
-);
-router.get("/:userId/tasks", requireAuth, requireSelfOrAdmin, getUserTasks);
+router.get("/:userId/projects", requireAuth, requireSelf, getUserProjects);
+router.get("/:userId/tasks", requireAuth, requireSelf, getUserTasks);
 router.get(
   "/:userId/time-entries",
   requireAuth,
-  requireSelfOrAdmin,
+  requireSelf,
   getUserTimeEntries,
 );
+router.get("/:userId/clients", requireAuth, requireSelf, getUserClients);
 router.get("/:userId/activities", getUserActivities);
 
 module.exports = router;

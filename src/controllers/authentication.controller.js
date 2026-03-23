@@ -33,6 +33,7 @@ async function login(req, res) {
       id: user.id,
       name: user.name,
       email: user.email,
+      role: user.role,
     };
     await session.save();
 
@@ -71,7 +72,15 @@ async function getCurrentUser(req, res) {
     const session = await getIronSession(req, res, sessionOptions);
     if (Object.keys(session).length === 0)
       return res.status(400).json({ message: "Not logged in" });
-    return res.status(200).json({ user: session.user });
+
+    const token = jwt.sign(
+      { userId: session.user.id, role: session.user.role },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1h",
+      },
+    );
+    return res.status(200).json({ user: session.user, token });
   } catch (e) {
     console.error(e);
     res.status(500).json({ message: "Internal server error" });

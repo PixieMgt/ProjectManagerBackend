@@ -28,7 +28,6 @@ async function getClientById(id) {
 
 async function getClientOwner(id) {
   const client = await getClientById(id);
-  console.log(client);
   if (!client) return null;
   return client.ownerUserId;
 }

@@ -64,7 +64,7 @@ function requireSelf(req, res, next) {
 async function requireClientOwner(req, res, next) {
   if (req.user.role === "admin") return next();
 
-  const clientId = resolveClientId(req);
+  const clientId = await resolveClientId(req);
   if (!clientId)
     return res.status(400).json({ message: "Failed to determine client ID" });
 

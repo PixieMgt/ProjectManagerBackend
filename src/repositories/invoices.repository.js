@@ -45,7 +45,10 @@ async function changeInvoice(id, data) {
 
 async function removeInvoice(id) {
   try {
-    const [row] = await db("invoices").where({ id }).delete().returning("*");
+    const [row] = await db("invoices")
+      .where({ id })
+      .update({ deleted_at: new Date() })
+      .returning("*");
     return row;
   } catch (e) {
     console.error(e);

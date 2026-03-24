@@ -42,7 +42,10 @@ async function changeClient(id, data) {
 
 async function removeClient(id) {
   try {
-    const [row] = await db("clients").where({ id }).delete().returning("*");
+    const [row] = await db("clients")
+      .where({ id })
+      .update({ deleted_at: new Date() })
+      .returning("*");
     return row;
   } catch (e) {
     console.error(e);

@@ -44,7 +44,10 @@ async function changeProject(id, data) {
 
 async function removeProject(id) {
   try {
-    const [row] = await db("projects").where({ id }).delete().returning("*");
+    const [row] = await db("projects")
+      .where({ id })
+      .update({ deleted_at: new Date() })
+      .returning("*");
     return row;
   } catch (e) {
     console.error(e);

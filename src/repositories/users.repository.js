@@ -52,7 +52,10 @@ async function changeUser(id, data) {
 
 async function removeUser(id) {
   try {
-    const [row] = await db("users").where({ id }).delete().returning("*");
+    const [row] = await db("users")
+      .where({ id })
+      .update({ deleted_at: new Date() })
+      .returning("*");
     return row;
   } catch (e) {
     console.error(e);

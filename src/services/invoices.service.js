@@ -73,8 +73,6 @@ async function createNewInvoiceItem(id, data) {
     unit_price: data.unitPrice,
   };
   const invoiceItem = await insertInvoiceItem(normalized);
-  console.log(invoiceItem);
-  console.log(toInvoiceItemModel(invoiceItem));
   return toInvoiceItemModel(invoiceItem);
 }
 

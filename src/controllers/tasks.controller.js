@@ -52,11 +52,11 @@ async function createTask(req, res) {
 
 async function updateTask(req, res) {
   try {
-    const task = await updateExistingTask(req.params.id, req.body);
+    const task = await updateExistingTask(req.params.taskId, req.body);
     if (!task)
       return res
         .status(404)
-        .json({ message: `Task with id ${req.params.id} not found` });
+        .json({ message: `Task with id ${req.params.taskId} not found` });
     return res.status(200).json({ task });
   } catch (e) {
     console.error(e);
@@ -69,11 +69,11 @@ async function updateTask(req, res) {
 
 async function deleteTask(req, res) {
   try {
-    const task = await deleteExistingTask(req.params.id);
+    const task = await deleteExistingTask(req.params.taskId);
     if (!task)
       return res
         .status(404)
-        .json({ message: `Task with id ${req.params.id} not found` });
+        .json({ message: `Task with id ${req.params.taskId} not found` });
     return res.status(200).json({ task });
   } catch (e) {
     console.error(e);
@@ -86,10 +86,10 @@ async function deleteTask(req, res) {
 
 async function getTaskTimeEntries(req, res) {
   try {
-    const timeEntries = await getAllTaskTimeEntries(req.params.id);
+    const timeEntries = await getAllTaskTimeEntries(req.params.taskId);
     if (!timeEntries)
       return res.status(404).json({
-        message: `Time entries for task with id ${req.params.id} not found`,
+        message: `Time entries for task with id ${req.params.taskId} not found`,
       });
     return res.status(200).json({ timeEntries });
   } catch (e) {

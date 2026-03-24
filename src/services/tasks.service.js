@@ -36,7 +36,7 @@ async function createNewTask(userId, data) {
     description: data.description,
     status: data.status,
     priority: data.priority,
-    estimated_hours: data.estimated_hours,
+    estimated_hours: data.estimatedHours,
   };
   const task = await insertTask(normalized);
   return toTaskModel(task);
@@ -48,7 +48,7 @@ async function updateExistingTask(id, data) {
     description: data.description,
     status: data.status,
     priority: data.priority,
-    estimated_hours: data.estimated_hours,
+    estimated_hours: data.estimatedHours,
   };
   const task = await changeTask(id, normalized);
   if (!task) return null;

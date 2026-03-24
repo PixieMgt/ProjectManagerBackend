@@ -86,7 +86,7 @@ module.exports = {
 async function resolveProjectId(req) {
   const sources = [
     () => req.params.projectId,
-    () => req.body.projectId,
+    () => req.body?.projectId,
     async () =>
       req.params.taskId && (await getTaskProjectId(req.params.taskId)),
     async () => req.body.taskId && (await getTaskProjectId(req.body.taskId)),

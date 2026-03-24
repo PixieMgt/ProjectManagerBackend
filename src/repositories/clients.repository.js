@@ -57,6 +57,7 @@ async function findAllUserClients(id) {
   try {
     const clients = await db("clients")
       .where({ owner_user_id: id })
+      .whereNull("deleted_at")
       .select("*");
     return clients;
   } catch (e) {

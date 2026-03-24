@@ -127,6 +127,7 @@ async function findAllUserProjects(id) {
   try {
     const projects = await db("projects")
       .where({ owner_user_id: id })
+      .whereNull("deleted_at")
       .select("*");
     return projects;
   } catch (e) {

@@ -10,6 +10,7 @@ const {
   removeProjectMember,
   findProjectMemberRole,
 } = require("../repositories/projects.repository");
+const { findUser } = require("../repositories/users.repository");
 const {
   toProjectModel,
   toProjectMemberModel,
@@ -74,7 +75,16 @@ async function deleteExistingProject(id) {
 async function getAllProjectMembers(id) {
   const members = await findAllProjectMembers(id);
   if (members.length === 0) return null;
-  return members.map(toProjectMemberModel);
+  const membersWithUserData = await Promise.all(
+    members.map(async (m) => {
+      const user = await findUser(m.user_id);
+      return {
+        ...m,
+        name: user.name,
+      };
+    }),
+  );
+  return membersWithUserData.map(toProjectMemberModel);
 }
 
 async function getProjectMemberRole(projectId, userId) {

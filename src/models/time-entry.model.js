@@ -4,6 +4,7 @@ function toTimeEntryModel(row) {
     taskId: row.task_id,
     userId: row.user_id,
     comment: row.comment,
+    date: row.date,
     startTime: row.start_time,
     endTime: row.end_time,
     durationMinutes: row.duration_minutes,

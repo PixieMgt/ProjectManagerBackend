@@ -6,6 +6,7 @@ const {
   removeTimeEntry,
 } = require("../repositories/time-entries.repository");
 const { toTimeEntryModel } = require("../models/time-entry.model");
+const { getTaskProjectId } = require("./tasks.service");
 
 async function getAllTimeEntries() {
   const timeEntries = await findAllTimeEntries();
@@ -20,8 +21,8 @@ async function getTimeEntryById(id) {
 
 async function getTimeEntryProjectId(id) {
   const timeEntry = await getTimeEntryById(id);
-  if (!task) return null;
-  return timeEntry.projectId;
+  if (!timeEntry) return null;
+  return await getTaskProjectId(timeEntry.taskId);
 }
 
 async function createNewTimeEntry(userId, data) {
@@ -29,6 +30,7 @@ async function createNewTimeEntry(userId, data) {
     task_id: data.taskId,
     user_id: userId,
     comment: data.comment,
+    date: data.date,
     start_time: data.startTime,
     end_time: data.endTime,
   };
@@ -39,6 +41,7 @@ async function createNewTimeEntry(userId, data) {
 async function updateExistingTimeEntry(id, data) {
   const normalized = {
     comment: data.comment,
+    date: data.date,
     start_time: data.startTime,
     end_time: data.endTime,
   };

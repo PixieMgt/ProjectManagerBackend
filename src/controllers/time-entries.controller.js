@@ -21,11 +21,13 @@ async function getTimeEntries(req, res) {
 
 async function getTimeEntry(req, res) {
   try {
-    const timeEntry = await getTimeEntryById(req.params.id);
+    const timeEntry = await getTimeEntryById(req.params.timeEntryId);
     if (!timeEntry)
       return res
         .status(404)
-        .json({ message: `Time entry with id $${req.params.id} not found` });
+        .json({
+          message: `Time entry with id $${req.params.timeEntryId} not found`,
+        });
     return res.status(200).json({ time_entry: timeEntry });
   } catch (e) {
     console.error(e);
@@ -51,11 +53,16 @@ async function createTimeEntry(req, res) {
 
 async function updateTimeEntry(req, res) {
   try {
-    const timeEntry = await updateExistingTimeEntry(req.params.id, req.body);
+    const timeEntry = await updateExistingTimeEntry(
+      req.params.timeEntryId,
+      req.body,
+    );
     if (!timeEntry)
       return res
         .status(404)
-        .json({ message: `Time entry with id $${req.params.id} not found` });
+        .json({
+          message: `Time entry with id $${req.params.timeEntryId} not found`,
+        });
     return res.status(200).json({ time_entry: timeEntry });
   } catch (e) {
     console.error(e);
@@ -68,11 +75,13 @@ async function updateTimeEntry(req, res) {
 
 async function deleteTimeEntry(req, res) {
   try {
-    const timeEntry = await deleteExistingTimeEntry(req.params.id);
+    const timeEntry = await deleteExistingTimeEntry(req.params.timeEntryId);
     if (!timeEntry)
       return res
         .status(404)
-        .json({ message: `Time entry with id ${req.params.id} not found` });
+        .json({
+          message: `Time entry with id ${req.params.timeEntryId} not found`,
+        });
     return res.status(200).json({ time_entry: timeEntry });
   } catch (e) {
     console.error(e);

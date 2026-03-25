@@ -89,7 +89,7 @@ async function resolveProjectId(req) {
     () => req.body?.projectId,
     async () =>
       req.params.taskId && (await getTaskProjectId(req.params.taskId)),
-    async () => req.body.taskId && (await getTaskProjectId(req.body.taskId)),
+    async () => req.body?.taskId && (await getTaskProjectId(req.body.taskId)),
     async () =>
       req.params.timeEntryId &&
       (await getTimeEntryProjectId(req.params.timeEntryId)),
@@ -106,7 +106,7 @@ async function resolveProjectId(req) {
 }
 
 async function resolveClientId(req) {
-  const sources = [() => req.params.clientId, () => req.body.clientId];
+  const sources = [() => req.params.clientId, () => req.body?.clientId];
 
   for (const getId of sources) {
     const id = await getId();

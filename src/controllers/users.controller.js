@@ -1,6 +1,7 @@
 const {
   getAllUsers,
   getUserById,
+  searchUserByEmail,
   createNewUser,
   updateExistingUser,
   deleteExistingUser,
@@ -14,6 +15,26 @@ async function getUsers(req, res) {
   try {
     const users = await getAllUsers();
     return res.status(200).json({ users });
+  } catch (e) {
+    console.error(e);
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function searchUser(req, res) {
+  const email = req.query.email?.trim();
+  if (!email) return res.json([]);
+
+  try {
+    const user = await searchUserByEmail(email);
+    if (!user)
+      return res
+        .status(404)
+        .json({ message: `User with e-mail ${email} not found` });
+    return res.status(200).json({ user });
   } catch (e) {
     console.error(e);
 
@@ -171,6 +192,7 @@ async function getUserActivities(req, res) {
 module.exports = {
   getUsers,
   getUser,
+  searchUser,
   createUser,
   updateUser,
   deleteUser,

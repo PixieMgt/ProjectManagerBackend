@@ -10,6 +10,16 @@ async function findAllUsers() {
   }
 }
 
+async function findUserByEmail(email) {
+  try {
+    const [row] = await db("users").whereLike("email", `%${email}%`);
+    return row;
+  } catch (e) {
+    console.error(e);
+    throw new Error("DATABASE_ERROR");
+  }
+}
+
 async function findUser(id) {
   try {
     const [row] = await db("users").where({ id }).select("*");
@@ -72,6 +82,7 @@ async function authenticateUser(email) {
 module.exports = {
   findAllUsers,
   findUser,
+  findUserByEmail,
   insertUser,
   changeUser,
   removeUser,

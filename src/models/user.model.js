@@ -7,6 +7,15 @@ function toUserModel(row) {
   };
 }
 
+function toUserSearchModel(row) {
+  return {
+    id: row.id,
+    name: row.name,
+    email: row.email,
+  };
+}
+
 module.exports = {
   toUserModel,
+  toUserSearchModel,
 };

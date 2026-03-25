@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const {
   findAllUsers,
   findUser,
+  findUserByEmail,
   insertUser,
   changeUser,
   removeUser,
@@ -12,7 +13,7 @@ const {
   findAllUserTimeEntries,
 } = require("../repositories/time-entries.repository");
 const { findAllUserTasks } = require("../repositories/tasks.repository");
-const { toUserModel } = require("../models/user.model");
+const { toUserModel, toUserSearchModel } = require("../models/user.model");
 const { toProjectModel } = require("../models/project.model");
 const { toTimeEntryModel } = require("../models/time-entry.model");
 const { toTaskModel } = require("../models/task.model");
@@ -22,6 +23,12 @@ const { toClientModel } = require("../models/client.model");
 async function getAllUsers() {
   const users = await findAllUsers();
   return users.map(toUserModel);
+}
+
+async function searchUserByEmail(email) {
+  const user = await findUserByEmail(email);
+  if (!user) return null;
+  return toUserSearchModel(user);
 }
 
 async function getUserById(id) {
@@ -90,6 +97,7 @@ async function getAllUserClients(id) {
 module.exports = {
   getAllUsers,
   getUserById,
+  searchUserByEmail,
   createNewUser,
   updateExistingUser,
   deleteExistingUser,

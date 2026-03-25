@@ -9,6 +9,7 @@ const {
 const {
   getUsers,
   getUser,
+  searchUser,
   createUser,
   updateUser,
   deleteUser,
@@ -25,6 +26,7 @@ const {
 } = require("../middleware/authentication.middleware");
 
 router.get("/", requireAuth, requireAdmin, getUsers);
+router.get("/search", requireAuth, searchUser);
 router.get("/:userId", requireAuth, requireSelf, getUser);
 router.post(
   "/",

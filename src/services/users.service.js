@@ -31,6 +31,12 @@ async function searchUserByEmail(email) {
   return toUserSearchModel(user);
 }
 
+async function searchUserById(id) {
+  const user = await findUser(id);
+  if (!user) return null;
+  return toUserSearchModel(user);
+}
+
 async function getUserById(id) {
   const user = await findUser(id);
   if (!user) return null;
@@ -98,6 +104,7 @@ module.exports = {
   getAllUsers,
   getUserById,
   searchUserByEmail,
+  searchUserById,
   createNewUser,
   updateExistingUser,
   deleteExistingUser,

@@ -44,6 +44,7 @@ async function createNewTask(userId, data) {
 
 async function updateExistingTask(id, data) {
   const normalized = {
+    owner_user_id: data.ownerUserId,
     title: data.title,
     description: data.description,
     status: data.status,

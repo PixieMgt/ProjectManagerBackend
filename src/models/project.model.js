@@ -14,7 +14,7 @@ function toProjectModel(row) {
 
 function toProjectMemberModel(row) {
   return {
-    id: row.id,
+    userId: row.user_id,
     projectId: row.project_id,
     name: row.name,
     role: row.role,

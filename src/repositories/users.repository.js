@@ -12,7 +12,7 @@ async function findAllUsers() {
 
 async function findUserByEmail(email) {
   try {
-    const [row] = await db("users").whereLike("email", `%${email}%`);
+    const [row] = await db("users").whereILike("email", email);
     return row;
   } catch (e) {
     console.error(e);

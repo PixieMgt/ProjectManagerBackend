@@ -9,6 +9,7 @@ const {
   getAllUserTimeEntries,
   getAllUserTasks,
   getAllUserClients,
+  searchUserById,
 } = require("../services/users.service");
 
 async function getUsers(req, res) {
@@ -26,10 +27,13 @@ async function getUsers(req, res) {
 
 async function searchUser(req, res) {
   const email = req.query.email?.trim();
-  if (!email) return res.json([]);
+  const id = req.query.id?.trim();
+  if (!email && !id) return res.json([]);
 
   try {
-    const user = await searchUserByEmail(email);
+    let user;
+    if (email) user = await searchUserByEmail(email);
+    if (id) user = await searchUserById(id);
     if (!user)
       return res
         .status(404)

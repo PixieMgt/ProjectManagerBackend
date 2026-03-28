@@ -9,6 +9,7 @@ const {
   updateExistingProjectMember,
   deleteExistingProjectMember,
   getAllProjectTasks,
+  getAllProjectTimeEntries,
   getAllProjectInvoices,
 } = require("../services/projects.service");
 
@@ -181,6 +182,23 @@ async function getProjectTasks(req, res) {
   }
 }
 
+async function getProjectTimeEntries(req, res) {
+  try {
+    const timeEntries = await getAllProjectTimeEntries(req.params.projectId);
+    if (!timeEntries)
+      return res.status(404).json({
+        message: `Time entries for project with id ${req.params.projectId} not found`,
+      });
+    return res.status(200).json({ timeEntries });
+  } catch (e) {
+    console.error(e);
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
 async function getProjectInvoices(req, res) {
   try {
     const invoices = await getAllProjectInvoices(req.params.projectId);
@@ -263,6 +281,7 @@ module.exports = {
   updateProjectMember,
   deleteProjectMember,
   getProjectTasks,
+  getProjectTimeEntries,
   getProjectActivities,
   getProjectDocuments,
   getProjectDeployments,

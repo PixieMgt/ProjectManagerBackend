@@ -21,6 +21,10 @@ const { findAllProjectTasks } = require("../repositories/tasks.repository");
 const {
   findAllProjectInvoices,
 } = require("../repositories/invoices.repository");
+const {
+  findAllTaskTimeEntries,
+} = require("../repositories/time-entries.repository");
+const { toTimeEntryModel } = require("../models/time-entry.model");
 
 async function getAllProjects() {
   const projects = await findAllProjects();
@@ -123,6 +127,17 @@ async function getAllProjectTasks(id) {
   return tasks.map(toTaskModel);
 }
 
+async function getAllProjectTimeEntries(id) {
+  const tasks = await findAllProjectTasks(id);
+  if (tasks.length === 0) return null;
+  const timeEntries = await Promise.all(
+    tasks.map((task) => findAllTaskTimeEntries(task.id)),
+  );
+  const flatTimeEntries = timeEntries.flat().filter(Boolean);
+  if (flatTimeEntries.length === 0) return null;
+  return flatTimeEntries.map(toTimeEntryModel);
+}
+
 async function getAllProjectInvoices(id) {
   const invoices = await findAllProjectInvoices(id);
   if (invoices.length === 0) return null;
@@ -141,5 +156,6 @@ module.exports = {
   updateExistingProjectMember,
   deleteExistingProjectMember,
   getAllProjectTasks,
+  getAllProjectTimeEntries,
   getAllProjectInvoices,
 };

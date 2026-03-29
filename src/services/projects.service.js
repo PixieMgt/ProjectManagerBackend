@@ -24,6 +24,7 @@ const {
 const {
   findAllTaskTimeEntries,
 } = require("../repositories/time-entries.repository");
+const { findTask } = require("../repositories/tasks.repository");
 const { toTimeEntryModel } = require("../models/time-entry.model");
 
 async function getAllProjects() {
@@ -33,6 +34,14 @@ async function getAllProjects() {
 
 async function getProjectById(id) {
   const project = await findProject(id);
+  if (!project) return null;
+  return toProjectModel(project);
+}
+
+async function getProjectByTaskId(taskId) {
+  const task = await findTask(taskId);
+  if (!task) return null;
+  const project = await findProject(task.project_id);
   if (!project) return null;
   return toProjectModel(project);
 }
@@ -147,6 +156,7 @@ async function getAllProjectInvoices(id) {
 module.exports = {
   getAllProjects,
   getProjectById,
+  getProjectByTaskId,
   createNewProject,
   updateExistingProject,
   deleteExistingProject,

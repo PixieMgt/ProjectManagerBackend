@@ -13,6 +13,7 @@ const {
   updateTask,
   deleteTask,
   getTaskTimeEntries,
+  getTaskProject,
   getTaskCommits,
   createTaskCommit,
   deleteTaskCommit,
@@ -50,6 +51,12 @@ router.get(
   requireAuth,
   requireMinProjectRole("viewer"),
   getTaskTimeEntries,
+);
+router.get(
+  "/:taskId/project",
+  requireAuth,
+  requireMinProjectRole("viewer"),
+  getTaskProject,
 );
 router.get("/:taskId/commits", getTaskCommits);
 router.post("/:taskId/commits", createTaskCommit);

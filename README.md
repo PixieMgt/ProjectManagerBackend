@@ -58,8 +58,9 @@ ProjectManager is a full-stack SaaS platform for freelance and small-team develo
 - user_id **bigint** NOT NULL (FK -> users.id)
 - idx_time_entries_user INDEX ON (user_id)
 - comment **varchar(MAX)**
-- start_time **datetime2**
-- end_time **datetime2**
+- date **date**
+- start_time **time**
+- end_time **time**
 - duration_minutes **int** AS DATEDIFF(MINUTE, start_time, end_time)
 - created_at **datetime2** NOT NULL DEFAULT GETDATE()
 ### repositories

@@ -6,6 +6,7 @@ const {
   deleteExistingTask,
   getAllTaskTimeEntries,
 } = require("../services/tasks.service");
+const { getProjectByTaskId } = require("../services/projects.service");
 
 async function getTasks(req, res) {
   try {
@@ -101,6 +102,23 @@ async function getTaskTimeEntries(req, res) {
   }
 }
 
+async function getTaskProject(req, res) {
+  try {
+    const project = await getProjectByTaskId(req.params.taskId);
+    if (!project)
+      return res
+        .status(404)
+        .json({ message: `Project for task with id ${taskId} not found` });
+    return res.status(200).json(project);
+  } catch (e) {
+    console.error(e);
+
+    if (e.message === "DATABASE_ERROR")
+      return res.status(500).json({ message: "Database error" });
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
 async function getTaskCommits(req, res) {
   try {
     res.status(200).json({ message: "under construction" });
@@ -135,6 +153,7 @@ module.exports = {
   updateTask,
   deleteTask,
   getTaskTimeEntries,
+  getTaskProject,
   getTaskCommits,
   createTaskCommit,
   deleteTaskCommit,

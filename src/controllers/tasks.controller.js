@@ -109,7 +109,7 @@ async function getTaskProject(req, res) {
       return res
         .status(404)
         .json({ message: `Project for task with id ${taskId} not found` });
-    return res.status(200).json(project);
+    return res.status(200).json({ project });
   } catch (e) {
     console.error(e);
 

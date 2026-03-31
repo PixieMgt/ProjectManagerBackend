@@ -34,7 +34,7 @@ async function getProjectById(id) {
   const members = await getAllProjectMembers(id);
   const tasks = await getAllProjectTasks(id);
   return {
-    project: toProjectModel(project, tasks, timeEntries),
+    project: toProjectModel(project),
     members,
     tasks,
   };

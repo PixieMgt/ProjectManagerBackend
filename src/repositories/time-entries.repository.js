@@ -136,6 +136,8 @@ async function findAllUserTimeEntries(id) {
         "p.hourly_rate as project_hourly_rate",
         "p.start_date as project_start_date",
         "p.deadline as project_deadline",
+        "u.id as user_id",
+        "u.name as user_name",
       );
     return timeEntries;
   } catch (e) {

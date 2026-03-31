@@ -143,7 +143,6 @@ async function getAllProjectTasks(id) {
 async function getAllProjectTimeEntries(id) {
   const tasks = await findAllProjectTasks(id);
   if (tasks.length === 0) return null;
-  console.log(tasks);
   const timeEntries = await Promise.all(
     tasks.map((task) => findAllTaskTimeEntries(task.task_id)),
   );

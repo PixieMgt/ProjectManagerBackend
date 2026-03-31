@@ -110,7 +110,6 @@ async function findAllInvoiceItems(id) {
         "unit_price as invoice_item_unit_price",
         "total as invoice_item_total",
       );
-    console.log(invoiceItems);
     return invoiceItems;
   } catch (e) {
     console.error(e);

@@ -35,10 +35,12 @@ async function getAllProjects() {
 async function getProjectById(id) {
   const project = await findProject(id);
   if (!project) return null;
+  const members = await getAllProjectMembers(id);
   const tasks = await getAllProjectTasks(id);
   const timeEntries = await getAllProjectTimeEntries(id);
   return {
     project: toProjectModel(project, tasks, timeEntries),
+    members,
     tasks,
     timeEntries,
   };

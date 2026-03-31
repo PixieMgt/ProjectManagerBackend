@@ -28,14 +28,14 @@ async function getProjects(req, res) {
 
 async function getProject(req, res) {
   try {
-    const { project, tasks, timeEntries } = await getProjectById(
+    const { project, members, tasks, timeEntries } = await getProjectById(
       req.params.projectId,
     );
     if (!project)
       return res
         .status(404)
         .json({ message: `Project with id ${req.params.projectId} not found` });
-    return res.status(200).json({ project, tasks, timeEntries });
+    return res.status(200).json({ project, members, tasks, timeEntries });
   } catch (e) {
     console.error(e);
 

@@ -22,7 +22,8 @@ async function getAllInvoices() {
 async function getInvoiceById(id) {
   const invoice = await findInvoice(id);
   if (!invoice) return null;
-  return toInvoiceModel(invoice);
+  const invoiceItems = await getAllInvoiceItems(id);
+  return { invoice: toInvoiceModel(invoice), invoiceItems };
 }
 
 async function getInvoiceProjectId(id) {

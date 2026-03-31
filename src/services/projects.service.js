@@ -35,15 +35,19 @@ async function getAllProjects() {
 async function getProjectById(id) {
   const project = await findProject(id);
   if (!project) return null;
-  return toProjectModel(project);
+  const tasks = await getAllProjectTasks(id);
+  const timeEntries = await getAllProjectTimeEntries(id);
+  return {
+    project: toProjectModel(project, tasks, timeEntries),
+    tasks,
+    timeEntries,
+  };
 }
 
 async function getProjectByTaskId(taskId) {
   const task = await findTask(taskId);
   if (!task) return null;
-  const project = await findProject(task.project_id);
-  if (!project) return null;
-  return toProjectModel(project);
+  return await getProjectById(task.project_id);
 }
 
 async function createNewProject(userId, data) {
@@ -139,8 +143,9 @@ async function getAllProjectTasks(id) {
 async function getAllProjectTimeEntries(id) {
   const tasks = await findAllProjectTasks(id);
   if (tasks.length === 0) return null;
+  console.log(tasks);
   const timeEntries = await Promise.all(
-    tasks.map((task) => findAllTaskTimeEntries(task.id)),
+    tasks.map((task) => findAllTaskTimeEntries(task.task_id)),
   );
   const flatTimeEntries = timeEntries.flat().filter(Boolean);
   if (flatTimeEntries.length === 0) return null;

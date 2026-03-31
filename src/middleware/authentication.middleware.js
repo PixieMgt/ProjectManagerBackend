@@ -29,9 +29,8 @@ function requireMinProjectRole(minRole) {
         .status(400)
         .json({ message: "Failed to determine project ID" });
 
-    const member = await getProjectMemberRole(projectId, req.user.userId);
-    if (!member)
-      return res.status(403).json({ message: "Not a project member" });
+    const role = await getProjectMemberRole(projectId, req.user.userId);
+    if (!role) return res.status(403).json({ message: "Not a project member" });
 
     const ROLE_LEVELS = {
       viewer: 1,
@@ -39,7 +38,7 @@ function requireMinProjectRole(minRole) {
       developer: 3,
       owner: 4,
     };
-    const memberAccessLevel = ROLE_LEVELS[member.role];
+    const memberAccessLevel = ROLE_LEVELS[role];
     const requiredAccessLevel = ROLE_LEVELS[minRole];
 
     if (memberAccessLevel < requiredAccessLevel)
@@ -50,7 +49,7 @@ function requireMinProjectRole(minRole) {
 }
 
 function requireAdmin(req, res, next) {
-  if (req.user.role === "admin")
+  if (req.user.role !== "admin")
     return res.status(403).json({ message: "Access denied" });
   next();
 }
@@ -68,7 +67,8 @@ async function requireClientOwner(req, res, next) {
   if (!clientId)
     return res.status(400).json({ message: "Failed to determine client ID" });
 
-  const clientOwnerId = await getClientOwner(clientId);
+  const clientOwner = await getClientOwner(clientId);
+  const clientOwnerId = clientOwner.id;
   if (req.user.userId !== clientOwnerId)
     return res.status(403).json({ message: "Access denied" });
 

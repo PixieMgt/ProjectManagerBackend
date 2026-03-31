@@ -23,13 +23,15 @@ async function getAllClients() {
 async function getClientById(id) {
   const client = await findClient(id);
   if (!client) return null;
-  return toClientModel(client);
+  const projects = await getAllClientProjects(id);
+  return { client: toClientModel(client), projects: projects };
 }
 
 async function getClientOwner(id) {
-  const client = await getClientById(id);
+  const client = await findClient(id);
   if (!client) return null;
-  return client.ownerUserId;
+  const normalized = toClientModel(client);
+  return normalized.owner;
 }
 
 async function createNewClient(userId, data) {

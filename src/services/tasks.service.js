@@ -19,13 +19,14 @@ async function getAllTasks() {
 async function getTaskById(id) {
   const task = await findTask(id);
   if (!task) return null;
-  return toTaskModel(task);
+  const timeEntries = await getAllTaskTimeEntries(id);
+  return { task: toTaskModel(task), timeEntries };
 }
 
 async function getTaskProjectId(id) {
   const task = await getTaskById(id);
   if (!task) return null;
-  return task.projectId;
+  return task.project.id;
 }
 
 async function createNewTask(userId, data) {

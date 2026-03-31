@@ -23,12 +23,12 @@ async function getClients(req, res) {
 
 async function getClient(req, res) {
   try {
-    const client = await getClientById(req.params.clientId);
+    const { client, projects } = await getClientById(req.params.clientId);
     if (!client)
       return res
         .status(404)
         .json({ message: `Client with id ${req.params.clientId} not found` });
-    return res.status(200).json({ client });
+    return res.status(200).json({ client, projects });
   } catch (e) {
     console.error(e);
 

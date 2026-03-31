@@ -2,7 +2,17 @@ const db = require("../config/db");
 
 async function findAllClients() {
   try {
-    const clients = await db("clients").select("*");
+    const clients = await db("clients as c")
+      .leftJoin("users as u", "c.owner_user_id", "u.id")
+      .select(
+        "c.id as client_id",
+        "c.name as client_name",
+        "c.email as client_email",
+        "c.phone as client_phone",
+        "c.notes as client_notes",
+        "u.id as owner_user_id",
+        "u.name as owner_user_name",
+      );
     return clients;
   } catch (e) {
     console.error(e);
@@ -12,7 +22,18 @@ async function findAllClients() {
 
 async function findClient(id) {
   try {
-    const [row] = await db("clients").where({ id }).select("*");
+    const [row] = await db("clients as c")
+      .where({ "c.id": id })
+      .leftJoin("users as u", "c.owner_user_id", "u.id")
+      .select(
+        "c.id as client_id",
+        "c.name as client_name",
+        "c.email as client_email",
+        "c.phone as client_phone",
+        "c.notes as client_notes",
+        "u.id as owner_user_id",
+        "u.name as owner_user_name",
+      );
     return row;
   } catch (e) {
     console.error(e);
@@ -58,7 +79,13 @@ async function findAllUserClients(id) {
     const clients = await db("clients")
       .where({ owner_user_id: id })
       .whereNull("deleted_at")
-      .select("*");
+      .select(
+        "id as client_id",
+        "name as client_name",
+        "email as client_email",
+        "phone as client_phone",
+        "notes as client_notes",
+      );
     return clients;
   } catch (e) {
     console.error(e);

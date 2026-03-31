@@ -23,12 +23,12 @@ async function getTasks(req, res) {
 
 async function getTask(req, res) {
   try {
-    const task = await getTaskById(req.params.id);
+    const { task, timeEntries } = await getTaskById(req.params.taskId);
     if (!task)
       return res
         .status(404)
         .json({ message: `Task with id ${req.params.id} not found` });
-    return res.status(200).json({ task });
+    return res.status(200).json({ task, timeEntries });
   } catch (e) {
     console.error(e);
 

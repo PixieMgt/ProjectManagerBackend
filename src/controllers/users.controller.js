@@ -50,12 +50,16 @@ async function searchUser(req, res) {
 
 async function getUser(req, res) {
   try {
-    const user = await getUserById(req.params.userId);
+    const { user, clients, projects, tasks, timeEntries } = await getUserById(
+      req.params.userId,
+    );
     if (!user)
       return res
         .status(404)
         .json({ message: `User with id ${req.params.userId} not found` });
-    return res.status(200).json({ user });
+    return res
+      .status(200)
+      .json({ user, clients, projects, tasks, timeEntries });
   } catch (e) {
     console.error(e);
 

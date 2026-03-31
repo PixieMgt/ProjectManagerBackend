@@ -25,12 +25,14 @@ async function getInvoices(req, res) {
 
 async function getInvoice(req, res) {
   try {
-    const invoice = await getInvoiceById(req.params.id);
+    const { invoice, invoiceItems } = await getInvoiceById(
+      req.params.invoiceId,
+    );
     if (!invoice)
       return res
         .status(404)
-        .json({ message: `Invoice with id ${req.params.id} not found` });
-    return res.status(200).json({ invoice });
+        .json({ message: `Invoice with id ${req.params.invoiceId} not found` });
+    return res.status(200).json({ invoice, invoiceItems });
   } catch (e) {
     console.error(e);
 
@@ -55,11 +57,11 @@ async function createInvoice(req, res) {
 
 async function updateInvoice(req, res) {
   try {
-    const invoice = await updateExistingInvoice(req.params.id, req.body);
+    const invoice = await updateExistingInvoice(req.params.invoiceId, req.body);
     if (!invoice)
       return res
         .status(404)
-        .json({ message: `Invoice with id ${req.params.id} not found` });
+        .json({ message: `Invoice with id ${req.params.invoiceId} not found` });
     return res.status(200).json({ invoice });
   } catch (e) {
     console.error(e);
@@ -72,11 +74,11 @@ async function updateInvoice(req, res) {
 
 async function deleteInvoice(req, res) {
   try {
-    const invoice = await deleteExistingInvoice(req.params.id);
+    const invoice = await deleteExistingInvoice(req.params.invoiceId);
     if (!invoice)
       return res
         .status(404)
-        .json({ message: `Invoice with id ${req.params.id} not found` });
+        .json({ message: `Invoice with id ${req.params.invoiceId} not found` });
     return res.status(200).json({ invoice });
   } catch (e) {
     console.error(e);
@@ -89,10 +91,10 @@ async function deleteInvoice(req, res) {
 
 async function getInvoiceItems(req, res) {
   try {
-    const invoiceItems = await getAllInvoiceItems(req.params.id);
+    const invoiceItems = await getAllInvoiceItems(req.params.invoiceId);
     if (!invoiceItems)
       return res.status(404).json({
-        message: `Invoice items for invoice with id ${req.params.id} not found`,
+        message: `Invoice items for invoice with id ${req.params.invoiceId} not found`,
       });
     return res.status(200).json({ invoiceItems });
   } catch (e) {
@@ -106,7 +108,10 @@ async function getInvoiceItems(req, res) {
 
 async function createInvoiceItem(req, res) {
   try {
-    const invoiceItem = await createNewInvoiceItem(req.params.id, req.body);
+    const invoiceItem = await createNewInvoiceItem(
+      req.params.invoiceId,
+      req.body,
+    );
     return res.status(200).json({ invoiceItem });
   } catch (e) {
     console.error(e);

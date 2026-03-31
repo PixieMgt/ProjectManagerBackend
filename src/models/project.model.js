@@ -1,23 +1,35 @@
 function toProjectModel(row) {
   return {
-    id: row.id,
-    clientId: row.client_id,
-    ownerUserId: row.owner_user_id,
-    name: row.name,
-    description: row.description,
-    status: row.status,
-    hourlyRate: row.hourly_rate,
-    startDate: row.start_date,
-    deadline: row.deadline,
+    id: row.project_id,
+    client: row.client_id
+      ? {
+          id: row.client_id,
+          name: row.client_name,
+          email: row.client_email,
+          phone: row.client_phone,
+          notes: row.client_notes,
+        }
+      : undefined,
+    owner: row.owner_user_id
+      ? {
+          id: row.owner_user_id,
+          name: row.owner_user_name,
+        }
+      : undefined,
+    name: row.project_name,
+    description: row.project_description,
+    status: row.project_status,
+    hourlyRate: row.project_hourly_rate,
+    startDate: row.project_start_date,
+    deadline: row.project_deadline,
   };
 }
 
 function toProjectMemberModel(row) {
   return {
-    userId: row.user_id,
-    projectId: row.project_id,
-    name: row.name,
-    role: row.role,
+    id: row.user_id,
+    name: row.user_name,
+    role: row.project_member_role,
   };
 }
 

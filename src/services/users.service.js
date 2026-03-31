@@ -40,7 +40,17 @@ async function searchUserById(id) {
 async function getUserById(id) {
   const user = await findUser(id);
   if (!user) return null;
-  return toUserModel(user);
+  const clients = await getAllUserClients(id);
+  const projects = await getAllUserProjects(id);
+  const tasks = await getAllUserTasks(id);
+  const timeEntries = await getAllUserTimeEntries(id);
+  return {
+    user: toUserModel(user),
+    clients,
+    projects,
+    tasks,
+    timeEntries,
+  };
 }
 
 async function createNewUser(data) {

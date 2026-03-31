@@ -19,7 +19,6 @@ const {
   updateProjectMember,
   deleteProjectMember,
   getProjectTasks,
-  getProjectTimeEntries,
   getProjectActivities,
   getProjectDocuments,
   getProjectDeployments,
@@ -93,12 +92,6 @@ router.get(
   requireAuth,
   requireMinProjectRole("viewer"),
   getProjectTasks,
-);
-router.get(
-  "/:projectId/time-entries",
-  requireAuth,
-  requireMinProjectRole("viewer"),
-  getProjectTimeEntries,
 );
 router.get(
   "/:projectId/invoices",

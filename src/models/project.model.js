@@ -22,6 +22,7 @@ function toProjectModel(row) {
     hourlyRate: row.project_hourly_rate,
     startDate: row.project_start_date,
     deadline: row.project_deadline,
+    members: row.members || undefined,
   };
 }
 

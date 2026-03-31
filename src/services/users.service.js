@@ -8,7 +8,10 @@ const {
   changeUser,
   removeUser,
 } = require("../repositories/users.repository");
-const { findAllUserProjects } = require("../repositories/projects.repository");
+const {
+  findAllUserProjects,
+  findAllProjectMembers,
+} = require("../repositories/projects.repository");
 const {
   findAllUserTimeEntries,
 } = require("../repositories/time-entries.repository");
@@ -89,6 +92,9 @@ async function deleteExistingUser(id) {
 async function getAllUserProjects(id) {
   const projects = await findAllUserProjects(id);
   if (projects.length === 0) return null;
+  for (const p of projects) {
+    p.members = await findAllProjectMembers(p.project_id);
+  }
   return projects.map(toProjectModel);
 }
 

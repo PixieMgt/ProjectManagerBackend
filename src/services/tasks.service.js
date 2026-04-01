@@ -24,7 +24,7 @@ async function getTaskById(id) {
 }
 
 async function getTaskProjectId(id) {
-  const task = await getTaskById(id);
+  const { task } = await getTaskById(id);
   if (!task) return null;
   return task.project.id;
 }

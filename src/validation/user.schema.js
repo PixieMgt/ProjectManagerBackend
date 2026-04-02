@@ -1,10 +1,16 @@
 const { z } = require("zod");
 
 const createUserSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.email("Invalid e-mail"),
+  name: z
+    .string("Name is required")
+    .min(1, "Name can't be empty")
+    .max(128, "Name is too long"),
+  email: z
+    .string("E-mail is required")
+    .check(z.trim(), z.toLowerCase(), z.email("Invalid e-mail")),
   password: z
-    .string()
+    .string("Password is required")
+    .trim()
     .min(8, "Password must be at least 8 characters long")
     .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
     .regex(/[a-z]/, "Password must contain at least one lowercase letter")
@@ -20,10 +26,17 @@ const createUserSchema = z.object({
 });
 
 const updateUserSchema = z.object({
-  name: z.string().min(1, "Name is required").optional(),
-  email: z.email("Invalid e-mail").optional(),
+  name: z
+    .string()
+    .min(1, "Name can't be empty")
+    .max(128, "Name is too long")
+    .optional(),
+  email: z
+    .string("E-mail is required")
+    .check(z.trim(), z.toLowerCase(), z.email("Invalid e-mail")),
   password: z
     .string()
+    .trim()
     .min(8, "Password must be at least 8 characters long")
     .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
     .regex(/[a-z]/, "Password must contain at least one lowercase letter")

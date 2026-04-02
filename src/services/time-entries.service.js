@@ -22,7 +22,7 @@ async function getTimeEntryById(id) {
 async function getTimeEntryProjectId(id) {
   const timeEntry = await getTimeEntryById(id);
   if (!timeEntry) return null;
-  return await getTaskProjectId(timeEntry.taskId);
+  return await getTaskProjectId(timeEntry.task.id);
 }
 
 async function createNewTimeEntry(userId, data) {

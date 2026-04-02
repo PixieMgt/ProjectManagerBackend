@@ -6,6 +6,15 @@ function toTaskModel(row) {
           id: row.project_id,
           name: row.project_name,
           description: row.project_description,
+          client: row.client_id
+            ? {
+                id: row.client_id,
+                name: row.client_name,
+                email: row.client_email,
+                phone: row.client_phone,
+                notes: row.client_notes,
+              }
+            : undefined,
           status: row.project_status,
           hourly_rate: row.project_hourly_rate,
           start_date: row.project_start_date,

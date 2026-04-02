@@ -34,6 +34,7 @@ async function findTask(id) {
     const [row] = await db("tasks as t")
       .where({ "t.id": id })
       .leftJoin("projects as p", "t.project_id", "p.id")
+      .leftJoin("clients as c", "p.client_id", "c.id")
       .leftJoin("users as u", "t.owner_user_id", "u.id")
       .select(
         "t.id as task_id",
@@ -49,6 +50,11 @@ async function findTask(id) {
         "p.hourly_rate as project_hourly_rate",
         "p.start_date as project_start_date",
         "p.deadline as project_deadline",
+        "c.id as client_id",
+        "c.name as client_name",
+        "c.email as client_email",
+        "c.phone as client_phone",
+        "c.notes as client_notes",
         "u.id as owner_user_id",
         "u.name as owner_user_name",
       );

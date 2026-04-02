@@ -9,7 +9,7 @@ const {
 async function getTimeEntries(req, res) {
   try {
     const timeEntries = await getAllTimeEntries();
-    return res.status(200).json({ time_entries: timeEntries });
+    return res.status(200).json({ timeEntries });
   } catch (e) {
     console.error(e);
 
@@ -26,7 +26,7 @@ async function getTimeEntry(req, res) {
       return res.status(404).json({
         message: `Time entry with id $${req.params.timeEntryId} not found`,
       });
-    return res.status(200).json({ time_entry: timeEntry });
+    return res.status(200).json({ timeEntry });
   } catch (e) {
     console.error(e);
 
@@ -39,7 +39,7 @@ async function getTimeEntry(req, res) {
 async function createTimeEntry(req, res) {
   try {
     const timeEntry = await createNewTimeEntry(req.user.userId, req.body);
-    return res.status(200).json({ time_entry: timeEntry });
+    return res.status(200).json({ timeEntry });
   } catch (e) {
     console.error(e);
 
@@ -59,7 +59,7 @@ async function updateTimeEntry(req, res) {
       return res.status(404).json({
         message: `Time entry with id $${req.params.timeEntryId} not found`,
       });
-    return res.status(200).json({ time_entry: timeEntry });
+    return res.status(200).json({ timeEntry });
   } catch (e) {
     console.error(e);
 
@@ -76,7 +76,7 @@ async function deleteTimeEntry(req, res) {
       return res.status(404).json({
         message: `Time entry with id ${req.params.timeEntryId} not found`,
       });
-    return res.status(200).json({ time_entry: timeEntry });
+    return res.status(200).json({ timeEntry });
   } catch (e) {
     console.error(e);
 

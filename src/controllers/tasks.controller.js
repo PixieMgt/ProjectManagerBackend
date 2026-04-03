@@ -104,7 +104,7 @@ async function getTaskTimeEntries(req, res) {
 
 async function getTaskProject(req, res) {
   try {
-    const project = await getProjectByTaskId(req.params.taskId);
+    const { project } = await getProjectByTaskId(req.params.taskId);
     if (!project)
       return res
         .status(404)

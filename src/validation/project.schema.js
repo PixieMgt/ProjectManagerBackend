@@ -7,7 +7,12 @@ const createProjectSchema = z.object({
     .trim()
     .min(1, "Name can't be empty")
     .max(128, "Name is too long"),
-  description: z.string().trim().max(500, "Description is too long").optional(),
+  description: z
+    .string()
+    .trim()
+    .min(1, "Description can't be empty")
+    .max(500, "Description is too long")
+    .optional(),
   status: z
     .enum(["planning", "active", "completed", "archived"], {
       invalid_type_error:
@@ -30,7 +35,12 @@ const updateProjectSchema = z.object({
     .min(1, "Name can't be empty")
     .max(128, "Name is too long")
     .optional(),
-  description: z.string().trim().max(500, "Description is too long").optional(),
+  description: z
+    .string()
+    .trim()
+    .min(1, "Description can't be empty")
+    .max(500, "Description is too long")
+    .optional(),
   status: z
     .enum(["planning", "active", "completed", "archived"], {
       invalid_type_error:

@@ -6,11 +6,10 @@ const createTimeEntrySchema = z.object({
     .string()
     .trim()
     .min(1, "Comment can't be empty")
-    .max(500, "Comment is too long")
-    .optional(),
-  date: z.coerce.date("Invalid date").optional(),
-  startTime: z.iso.time("Invalid time").optional(),
-  endTime: z.iso.time("Invalid time").optional(),
+    .max(500, "Comment is too long"),
+  date: z.coerce.date("Invalid date"),
+  startTime: z.iso.time("Invalid time"),
+  endTime: z.iso.time("Invalid time"),
 });
 
 const updateTimeEntrySchema = z.object({

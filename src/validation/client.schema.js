@@ -10,7 +10,8 @@ const createClientSchema = z
       .max(128, "Name is too long"),
     email: z
       .string("E-mail is required")
-      .check(z.trim(), z.toLowerCase(), z.email("Invalid e-mail")),
+      .check(z.trim(), z.toLowerCase(), z.email("Invalid e-mail"))
+      .optional(),
     phone: z
       .string()
       .trim()
@@ -33,7 +34,8 @@ const updateClientSchema = z
       .optional(),
     email: z
       .string()
-      .check(z.trim(), z.toLowerCase(), z.email("Invalid e-mail")),
+      .check(z.trim(), z.toLowerCase(), z.email("Invalid e-mail"))
+      .optional(),
     phone: z
       .string()
       .trim()

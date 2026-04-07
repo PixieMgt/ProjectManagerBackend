@@ -1,0 +1,56 @@
+name: Deploy - Staging
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Build image
+        run: |
+          docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/projectmanager-backend:staging-latest .
+
+      - name: Push image
+        run: |
+          docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/projectmanager-backend:staging-latest
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
+
+      - name: Update Kubernetes secrets
+        run: |
+          kubectl delete secret backend-secrets -n staging --ignore-not-found
+          kubectl create secret generic backend-secrets \
+            -n staging \
+            --from-literal=DB_PASSWORD="${{ secrets.STAGING_DB_PASSWORD }}" \
+            --from-literal=JWT_SECRET="${{ secrets.STAGING_JWT_SECRET }}" \
+            --from-literal=SESSION_SECRET="${{ secrets.STAGING_SESSION_SECRET }}"
+
+      - name: Apply manifests
+        run: |
+          kubectl apply -f k8s/deployment.yaml -n staging
+          kubectl apply -f k8s/service.yaml -n staging
+
+      - name: Restart deployment
+        run: |
+          kubectl rollout restart deployment/backend -n staging
+          kubectl rollout status deployment/backend -n staging

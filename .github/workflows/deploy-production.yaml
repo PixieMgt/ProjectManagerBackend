@@ -37,6 +37,8 @@ jobs:
           echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
 
       - name: Update Kubernetes secrets
+        env:
+          GODEBUD: "netdns=go+ipv4only"
         run: |
           kubectl delete secret backend-secrets -n production --ignore-not-found
           kubectl create secret generic backend-secrets \

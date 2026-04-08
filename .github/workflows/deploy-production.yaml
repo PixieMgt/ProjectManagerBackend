@@ -10,6 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Disable IPv6
+        run: |
+          sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
+          sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
+          sudo sysctl -w net.ipv6.conf.lo.disable_ipv6=1
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -37,8 +43,6 @@ jobs:
           echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
 
       - name: Update Kubernetes secrets
-        env:
-          GODEBUD: "netdns=go+ipv4only"
         run: |
           kubectl delete secret backend-secrets -n production --ignore-not-found
           kubectl create secret generic backend-secrets \

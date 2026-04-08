@@ -26,6 +26,9 @@ jobs:
           username: ${{ secrets.GHCR_USERNAME }}
           password: ${{ secrets.GHCR_TOKEN }}
 
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
       - name: Build image
         run: |
           docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/projectmanager-backend:prod-latest .

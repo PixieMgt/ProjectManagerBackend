@@ -46,6 +46,8 @@ jobs:
             --from-literal=SESSION_SECRET="${{ secrets.STAGING_SESSION_SECRET }}"
 
       - name: Apply manifests
+        env:
+          GODEBUD: "netdns=go+ipv4only"
         run: |
           kubectl apply -f k8s/deployment.yaml -n staging
           kubectl apply -f k8s/service.yaml -n staging

@@ -45,11 +45,33 @@ jobs:
           mkdir -p ~/.kube
           echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > ~/.kube/config
 
+      - name: Start SSH over Cloudflare Tunnel
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          cloudflared access ssh \
+            --hostname ssh.pixiemgt.com \
+            --id ${{ secrets.CF_CLIENT_ID }} \
+            --secret ${{ secrets.CF_CLIENT_SECRET }} \
+            --ssh-config ~/.ssh/config
+
+          sed -i '/Host ssh.pixiemgt.com/a\  User projectmanager' ~/.ssh/config
+      
+      - name: Port forward Kubernetes API
+        run: |
+          ssh -fN \
+            -o StrictHostKeyChecking=no \
+            -L 6443:127.0.0.1:6443 \
+            projectmanager@ssh.pixiemgt.com
+
       - name: Update Kubernetes secrets
         run: |
           kubectl delete secret backend-secrets -n staging --ignore-not-found
           kubectl create secret generic backend-secrets \
             -n staging \
+            --from-literal=DB_USER="${{ secrets.PROD_DB_USER }}"
             --from-literal=DB_PASSWORD="${{ secrets.STAGING_DB_PASSWORD }}" \
             --from-literal=JWT_SECRET="${{ secrets.STAGING_JWT_SECRET }}" \
             --from-literal=SESSION_SECRET="${{ secrets.STAGING_SESSION_SECRET }}"

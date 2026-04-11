@@ -32,33 +32,27 @@ jobs:
         run: |
           docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/projectmanagerbackend:latest
 
-      - name: Install cloudflared
+      - name: Install Tailscale
         run: |
-          sudo wget -q https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -O /usr/local/bin/cloudflared
-          sudo chmod +x /usr/local/bin/cloudflared
+          curl -fsSL https://tailscale.com/install.sh | sh
 
-      - name: Configure SSH over Cloudflare Tunnel
+      - name: Connect to Tailscale
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-
-          {
-            echo "Host ssh.pixiemgt.com"
-            echo "  ProxyCommand cloudflared access tcp --hostname %h --id ${{ secrets.CF_CLIENT_ID }} --secret ${{ secrets.CF_CLIENT_SECRET }}"
-            echo "  User projectmanager"
-            echo "  IdentityFile ~/.ssh/id_ed25519"
-            echo "  StrictHostKeyChecking no"
-          } > ~/.ssh/config
+          sudo tailscale up \
+            --auth-key=${{ secrets.TS_KEY }} \
+            --hostname=github-actions-runner \
+            --ssh
 
       - name: Copy manifests to VM
         run: |
-          scp -r k8s ssh.pixiemgt.com:/tmp/k8s
+          scp -o StrictHostKeyChecking=no -r k8s projectmanager@${{ secrets.TS_VM_IP }}:/tmp/k8s
 
       - name: Apply manifests on VM
         run: |
-          ssh ssh.pixiemgt.com "kubectl apply -f /tmp/k8s -n production"
+          ssh -o StrictHostKeyChecking=no projectmanager@${{ secrets.TS_VM_IP }} \
+            "kubectl apply -f /tmp/k8s -n production"
 
       - name: Restart deployment
         run: |
-          ssh ssh.pixiemgt.com "kubectl rollout restart deployment/backend -n production && kubectl rollout status deployment/backend -n production"
+          ssh -o StrictHostKeyChecking=no projectmanager@${{ secrets.TS_VM_IP }} \
+            "kubectl rollout restart deployment/backend -n production && kubectl rollout status deployment/backend -n production"

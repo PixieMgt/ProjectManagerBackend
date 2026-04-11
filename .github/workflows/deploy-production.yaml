@@ -56,12 +56,14 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          cloudflared access ssh-config \
-            --hostname ssh.pixiemgt.com \
-            --id ${{ secrets.CF_CLIENT_ID }} \
-            --secret ${{ secrets.CF_CLIENT_SECRET }} \
-            > ~/.ssh/config
-          sed -i '/Host ssh.pixiemgt.com/a\  User projectmanager' ~/.ssh/config
+
+          cat << 'EOF' > ~/.ssh/config
+          Host ssh.pixiemgt.com
+            ProxyCommand cloudflared access tcp --hostname %h --id ${{ secrets.CF_CLIENT_ID }} --secret ${{ secrets.CF_CLIENT_SECRET }}
+            User projectmanager
+            IdentityFile ~/.ssh/id_ed25519
+            StrictHostKeyChecking no
+          EOF
       
       - name: Port forward Kubernetes API
         run: |

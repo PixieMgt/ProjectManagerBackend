@@ -1,0 +1,58 @@
+name: Deploy - Production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Build image
+        run: |
+          docker build -t ghcr.io/${{ secrets.GHCR_USERNAME }}/projectmanagerbackend:latest .
+
+      - name: Push image
+        run: |
+          docker push ghcr.io/${{ secrets.GHCR_USERNAME }}/projectmanagerbackend:latest
+
+      - name: Install Tailscale
+        run: |
+          curl -fsSL https://tailscale.com/install.sh | sh
+
+      - name: Connect to Tailscale
+        run: |
+          sudo tailscale up \
+            --auth-key=${{ secrets.TS_KEY }} \
+            --hostname=github-actions-runner \
+            --ssh
+
+      - name: Copy manifests to VM
+        run: |
+          scp -o StrictHostKeyChecking=no -r k8s projectmanager@${{ secrets.TS_VM_IP }}:/tmp/k8s
+
+      - name: Apply manifests on VM
+        run: |
+          ssh -o StrictHostKeyChecking=no projectmanager@${{ secrets.TS_VM_IP }} \
+            "kubectl apply -f /tmp/k8s -n production"
+
+      - name: Restart deployment
+        run: |
+          ssh -o StrictHostKeyChecking=no projectmanager@${{ secrets.TS_VM_IP }} \
+            "kubectl rollout restart deployment/backend -n production && kubectl rollout status deployment/backend -n production"

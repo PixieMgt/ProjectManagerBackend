@@ -21,7 +21,7 @@ const createProjectSchema = z.object({
     .optional(),
   hourlyRate: z
     .number()
-    .positive("Hourly rate can't be negative")
+    .nonnegative("Hourly rate can't be negative")
     .max(10000, "Hourly rate is too high")
     .optional(),
   startDate: z.coerce.date("Invalid date").optional(),
@@ -49,7 +49,7 @@ const updateProjectSchema = z.object({
     .optional(),
   hourlyRate: z
     .number()
-    .positive("Hourly rate can't be negative")
+    .nonnegative("Hourly rate can't be negative")
     .max(10000, "Hourly rate is too high")
     .optional(),
   startDate: z.coerce.date("Invalid date").optional(),

@@ -37,11 +37,11 @@ const createInvoiceItemSchema = z
       .max(500, "Description is too long"),
     quantity: z
       .number("Quantity is required")
-      .positive("Quantity can't be negative")
+      .nonnegative("Quantity can't be negative")
       .max(10000, "Quantity is too high"),
     unitPrice: z
       .number("Unit price is required")
-      .positive("Unit price can't be negative")
+      .nonnegative("Unit price can't be negative")
       .max(1000000, "Unit price is too high"),
   })
   .strict();
@@ -56,12 +56,12 @@ const updateInvoiceItemSchema = z
       .optional(),
     quantity: z
       .number()
-      .positive("Quantity can't be negative")
+      .nonnegative("Quantity can't be negative")
       .max(10000, "Quantity is too high")
       .optional(),
     unitPrice: z
       .number()
-      .positive("Unit price can't be negative")
+      .nonnegative("Unit price can't be negative")
       .max(1000000, "Unit price is too high")
       .optional(),
   })

@@ -30,7 +30,7 @@ const createTaskSchema = z.object({
     .optional(),
   estimatedHours: z
     .number()
-    .positive("Estimated hours can't be negative")
+    .nonnegative("Estimated hours can't be negative")
     .max(10000, "Estimated hours is too high")
     .optional(),
 });
@@ -63,7 +63,7 @@ const updateTaskSchema = z.object({
     .optional(),
   estimatedHours: z
     .number()
-    .positive("Estimated hours can't be negative")
+    .nonnegative("Estimated hours can't be negative")
     .max(10000, "Estimated hours is too high")
     .optional(),
 });

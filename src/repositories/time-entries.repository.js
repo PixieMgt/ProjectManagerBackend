@@ -100,7 +100,7 @@ async function removeTimeEntry(id) {
   try {
     const [row] = await db("time_entries")
       .where({ id })
-      .delete()
+      .update({ deleted_at: new Date() })
       .returning("*");
     return row;
   } catch (e) {
@@ -113,6 +113,7 @@ async function findAllUserTimeEntries(id) {
   try {
     const timeEntries = await db("time_entries as te")
       .where({ "te.user_id": id })
+      .whereNull("te.deleted_at")
       .leftJoin("tasks as t", "te.task_id", "t.id")
       .leftJoin("projects as p", "t.project_id", "p.id")
       .leftJoin("users as u", "te.user_id", "u.id")
@@ -150,6 +151,7 @@ async function findAllTaskTimeEntries(id) {
   try {
     const timeEntries = await db("time_entries as te")
       .where({ "te.task_id": id })
+      .whereNull("te.deleted_at")
       .leftJoin("users as u", "te.user_id", "u.id")
       .select(
         "te.id as time_entry_id",

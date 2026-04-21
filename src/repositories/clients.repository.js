@@ -3,6 +3,7 @@ const db = require("../config/db");
 async function findAllClients() {
   try {
     const clients = await db("clients as c")
+      .whereNull("c.deleted_at")
       .leftJoin("users as u", "c.owner_user_id", "u.id")
       .select(
         "c.id as client_id",

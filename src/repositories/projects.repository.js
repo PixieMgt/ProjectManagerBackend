@@ -195,6 +195,7 @@ async function findAllClientProjects(id) {
   try {
     const projects = await db("projects")
       .where({ client_id: id })
+      .whereNull("deleted_at")
       .select(
         "id as project_id",
         "name as project_name",

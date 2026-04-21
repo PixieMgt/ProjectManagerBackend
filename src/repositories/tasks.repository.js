@@ -87,7 +87,10 @@ async function changeTask(id, data) {
 
 async function removeTask(id) {
   try {
-    const [row] = await db("tasks").where({ id }).delete().returning("*");
+    const [row] = await db("tasks")
+      .where({ id })
+      .update({ deleted_at: new Date() })
+      .returning("*");
     return row;
   } catch (e) {
     console.error(e);
@@ -99,6 +102,7 @@ async function findAllUserTasks(id) {
   try {
     const tasks = await db("tasks as t")
       .where({ "t.owner_user_id": id })
+      .whereNull("t.deleted_at")
       .leftJoin("projects as p", "t.project_id", "p.id")
       .leftJoin("users as u", "t.owner_user_id", "u.id")
       .select(
@@ -129,6 +133,7 @@ async function findAllProjectTasks(id) {
   try {
     const tasks = await db("tasks as t")
       .where({ "t.project_id": id })
+      .whereNull("t.deleted_at")
       .leftJoin("users as u", "t.owner_user_id", "u.id")
       .select(
         "t.id as task_id",

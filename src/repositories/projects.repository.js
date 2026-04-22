@@ -155,7 +155,7 @@ async function removeProjectMember(projectId, userId) {
     const [row] = await db("project_members")
       .where({ project_id: projectId })
       .where({ user_id: userId })
-      .delete()
+      .update({ deleted_at: new Date() })
       .returning("*");
     return row;
   } catch (e) {

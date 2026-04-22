@@ -10,6 +10,7 @@ const { toTimeEntryModel } = require("../models/time-entry.model");
 const {
   findAllTaskTimeEntries,
 } = require("../repositories/time-entries.repository");
+const { deleteExistingTimeEntry } = require("./time-entries.service");
 
 async function getAllTasks() {
   const tasks = await findAllTasks();
@@ -19,7 +20,6 @@ async function getAllTasks() {
 async function getTaskById(id) {
   const task = await findTask(id);
   if (!task) return null;
-  const timeEntries = await getAllTaskTimeEntries(id);
   return { task: toTaskModel(task), timeEntries };
 }
 
@@ -60,6 +60,10 @@ async function updateExistingTask(id, data) {
 async function deleteExistingTask(id) {
   const task = await removeTask(id);
   if (!task) return null;
+  const timeEntries = await findAllTaskTimeEntries(id);
+  timeEntries.forEach(
+    async (te) => await deleteExistingTimeEntry(te.time_entry_id),
+  );
   return toTaskModel(task);
 }
 

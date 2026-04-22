@@ -99,6 +99,7 @@ async function findAllProjectMembers(id) {
       .leftJoin("users as u", "pm.user_id", "u.id")
       .select(
         "u.id as user_id",
+        "pm.project_id as project_id",
         "u.name as user_name",
         "pm.role as project_member_role",
       );

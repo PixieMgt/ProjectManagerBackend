@@ -22,6 +22,7 @@ const {
   findAllProjectInvoices,
 } = require("../repositories/invoices.repository");
 const { findTask } = require("../repositories/tasks.repository");
+const { deleteExistingTask } = require("./tasks.service");
 
 async function getAllProjects() {
   const projects = await findAllProjects();
@@ -82,6 +83,12 @@ async function updateExistingProject(id, data) {
 async function deleteExistingProject(id) {
   const project = await removeProject(id);
   if (!project) return null;
+  const members = await findAllProjectMembers(id);
+  members.forEach(
+    async (pm) => await deleteExistingProjectMember(pm.project_id, pm.user_id),
+  );
+  const tasks = await findAllProjectTasks(id);
+  tasks.forEach(async (t) => await deleteExistingTask(t.task_id));
   return toProjectModel(project);
 }
 

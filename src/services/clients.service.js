@@ -14,6 +14,7 @@ const {
 const { toClientModel } = require("../models/client.model");
 const { toProjectModel } = require("../models/project.model");
 const { toInvoiceModel } = require("../models/invoice.model");
+const { deleteExistingProject } = require("./projects.service");
 
 async function getAllClients() {
   const clients = await findAllClients();
@@ -61,6 +62,8 @@ async function updateExistingClient(id, data) {
 async function deleteExistingClient(id) {
   const client = await removeClient(id);
   if (!client) return null;
+  const projects = await findAllClientProjects(id);
+  projects.forEach(async (p) => await deleteExistingProject(p.project_id));
   return toClientModel(client);
 }
 

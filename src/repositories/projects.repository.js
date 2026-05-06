@@ -167,24 +167,35 @@ async function removeProjectMember(projectId, userId) {
 
 async function findAllUserProjects(id) {
   try {
-    const projects = await db("projects as p")
-      .where({ "p.owner_user_id": id })
-      .whereNull("p.deleted_at")
-      .leftJoin("clients as c", "p.client_id", "c.id")
-      .select(
-        "p.id as project_id",
-        "p.name as project_name",
-        "p.description as project_description",
-        "p.status as project_status",
-        "p.hourly_rate as project_hourly_rate",
-        "p.start_date as project_start_date",
-        "p.deadline as project_deadline",
-        "c.id as client_id",
-        "c.name as client_name",
-        "c.email as client_email",
-        "c.phone as client_phone",
-        "c.notes as client_notes",
-      );
+    const projectMembers = await db("project_members")
+      .where({ user_id: id })
+      .select("project_id");
+    const projects = await Promise.all(
+      projectMembers.map(async (pm) => {
+        return db("projects as p")
+          .where({ "p.id": Number(pm.project_id) })
+          .whereNull("p.deleted_at")
+          .leftJoin("clients as c", "p.client_id", "c.id")
+          .leftJoin("users as u", "p.owner_user_id", "u.id")
+          .select(
+            "p.id as project_id",
+            "p.name as project_name",
+            "p.description as project_description",
+            "p.status as project_status",
+            "p.hourly_rate as project_hourly_rate",
+            "p.start_date as project_start_date",
+            "p.deadline as project_deadline",
+            "c.id as client_id",
+            "c.name as client_name",
+            "c.email as client_email",
+            "c.phone as client_phone",
+            "c.notes as client_notes",
+            "u.id as owner_user_id",
+            "u.name as owner_user_name",
+          )
+          .first();
+      }),
+    );
     return projects;
   } catch (e) {
     console.error(e);
